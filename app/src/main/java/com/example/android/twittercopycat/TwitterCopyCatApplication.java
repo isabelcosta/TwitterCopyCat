@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import com.orm.SugarApp;
 
 import java.net.InetAddress;
+import java.util.LinkedList;
 
 /**
  * Created by IsabelCosta on 20-04-2016.
@@ -22,6 +23,7 @@ public class TwitterCopyCatApplication extends SugarApp {
     private SharedPreferences _sharedPrefs;
     private String _username;
     private String _password;
+    private LinkedList<String> offlineTweets = new LinkedList<>();
 
     @Override
     public void onCreate()
@@ -93,6 +95,10 @@ public class TwitterCopyCatApplication extends SugarApp {
             return false;
         }
 
+    }
+
+    public void addOfflineTweet(String offTweet){
+        offlineTweets.add(offTweet);
     }
 
 }
