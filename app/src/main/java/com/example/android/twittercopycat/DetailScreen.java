@@ -1,10 +1,11 @@
 package com.example.android.twittercopycat;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class DetailScreen extends AppCompatActivity {
 
@@ -32,19 +33,11 @@ public class DetailScreen extends AppCompatActivity {
         TextView text = (TextView) findViewById(R.id.textView_tweet);
         text.setText(String.valueOf(tweet.getTweetText()));
 
-        /*
-        URI oldUri = tweet.getTweetAuthorPic();
-        Uri newUri  = new Uri.Builder().scheme(oldUri.getScheme())
-                .encodedAuthority(oldUri.getRawAuthority())
-                .encodedPath(oldUri.getRawPath())
-                .query(oldUri.getRawQuery())
-                .fragment(oldUri.getRawFragment())
-                .build();
-        */
-        //Log.d("Debugging image: ",tweet.getTweetAuthorPic().toString());
-
         ImageView authorPic = (ImageView) findViewById(R.id.imageView_author);
-        authorPic.setImageURI(Uri.parse(tweet.getTweetAuthorPic().toString()));
-
+        ImageLoader.getInstance().displayImage(
+                tweet.getTweetAuthorPic(),
+                authorPic,
+                TwitterCopyCatApplication.getInstance().getOptions()
+        );
     }
 }

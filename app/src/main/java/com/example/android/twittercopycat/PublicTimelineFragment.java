@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import winterwell.jtwitter.Twitter;
@@ -46,7 +47,7 @@ public class PublicTimelineFragment extends Fragment {
 
     private ListView mListView;
     private ListScreenAdapter mListAdapter;
-    private List<Twitter.Status> publicTimeline;
+    private List<TweetItem> publicTimeline;
     private int maxCharacters = 20;
 
     public PublicTimelineFragment() {
@@ -79,7 +80,7 @@ public class PublicTimelineFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        publicTimeline = new ArrayList<Twitter.Status>();
+        publicTimeline = new ArrayList<TweetItem>();
     }
 
     @Override
@@ -144,6 +145,7 @@ public class PublicTimelineFragment extends Fragment {
             updateTweets();
         } else {
             Toast.makeText(getContext(), "No internet connection", Toast.LENGTH_LONG).show();
+            fillAdapterWithOfflineTweets();
             // Get Tweets from DB
         }
     }
@@ -168,20 +170,25 @@ public class PublicTimelineFragment extends Fragment {
         tweetTask.execute();
     }
 
-    private void fillAdapterWithTweets(){
+    private void fillAdapterWithOnlineTweets(){
         if (mListAdapter != null) {
             mListAdapter.clear();
-            for(Twitter.Status tweet : publicTimeline) {
-                mListAdapter.add(
-                        new TweetItem(
-                                tweet.getId(),                          //id
-                                tweet.getUser().getName(),              //author's name
-                                tweet.getUser().getProfileImageUrl(),   //author's picture
-                                tweet.getUser().getDescription(),       //author's description
-                                tweet.getCreatedAt().toString(),        //date
-                                tweet.getText()                         //tweet text
-                        )
-                );
+
+            //erase old tweets from database
+            //TweetItem.deleteAll(TweetItem.class);
+
+            for(TweetItem tweet : publicTimeline) {
+                mListAdapter.add(tweet);
+            }
+        }
+    }
+
+    private void fillAdapterWithOfflineTweets(){
+        if (mListAdapter != null) {
+            mListAdapter.clear();
+            List<TweetItem> publicOfflineTimeline =  TweetItem.listAll(TweetItem.class);
+            for(TweetItem tweet : publicOfflineTimeline) {
+                mListAdapter.add(tweet);
             }
         }
     }
@@ -224,7 +231,7 @@ public class PublicTimelineFragment extends Fragment {
         return format.format(date).toString();
     }
 
-    public class FetchPublicTweetTask extends AsyncTask<Void, Void, List<Twitter.Status>> {
+    public class FetchPublicTweetTask extends AsyncTask<Void, Void, List<TweetItem>> {
 
         private final String LOG_TAG = FetchPublicTweetTask.class.getSimpleName();
         private final int maxPubTweets = 10;
@@ -232,9 +239,9 @@ public class PublicTimelineFragment extends Fragment {
 
         private PublicTimelineFragment.ListScreenAdapter mTweetAdapter;
         private final Context mContext;
-        private List<Twitter.Status> timeline;
+        private List<TweetItem> timeline;
 
-        public FetchPublicTweetTask(Context context, List<Twitter.Status> givenTimeline) {
+        public FetchPublicTweetTask(Context context, List<TweetItem> givenTimeline) {
             mContext = context;
             timeline = givenTimeline;
         }
@@ -242,28 +249,58 @@ public class PublicTimelineFragment extends Fragment {
         private boolean DEBUG = true;
 
         @Override
-        protected List<Twitter.Status> doInBackground(Void... params) {
+        protected List<TweetItem> doInBackground(Void... params) {
 
             Twitter t = new Twitter();
             t.setAPIRootUrl(apiUrl);
             t.setCount(maxPubTweets);
             List<Twitter.Status> fetchedTimeline = t.getPublicTimeline();
 
-            return fetchedTimeline;
+            if(fetchedTimeline == null){
+                return null;
+            }
+
+//
+//            for(TweetItem twiii : tweets){
+//                twiii.delete();
+//            }
+
+            //erase old tweets from database
+            TweetItem.deleteAll(TweetItem.class);
+            //TweetItem.saveT();
+
+            List<TweetItem> tweets = TweetItem.listAll(TweetItem.class);
+            tweets.size();
+            List<TweetItem> TweetItems = new LinkedList<>();
+
+            for(Twitter.Status tweet : fetchedTimeline) {
+                TweetItem newTweet = new TweetItem(
+                        tweet.getId(),                                      //id
+                        tweet.getUser().getName(),                          //author's name
+                        tweet.getUser().getProfileImageUrl().toString(),    //author's picture
+                        tweet.getUser().getDescription(),                   //author's description
+                        tweet.getCreatedAt().toString(),                    //date
+                        tweet.getText()                                     //tweet text
+                );
+                TweetItems.add(newTweet);
+                newTweet.save();
+            }
+
+            return TweetItems;
         }
 
         @Override
-        protected void onPostExecute(List<Twitter.Status> result) {
+        protected void onPostExecute(List<TweetItem> result) {
 
             if (result != null) {
                 Log.d(LOG_TAG, "I GOT SOMETHING FROM SERVER");
                 timeline.clear();
-                for(Twitter.Status tweet : result) {
+                for(TweetItem tweet : result) {
                     timeline.add(tweet);
                 }
                 // New data is back from the server.  Hooray!
             }
-            fillAdapterWithTweets();
+            fillAdapterWithOnlineTweets();
         }
     }
 }

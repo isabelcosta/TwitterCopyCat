@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orm.SugarApp;
 
 import java.net.InetAddress;
@@ -24,16 +27,38 @@ public class TwitterCopyCatApplication extends SugarApp {
     private String _username;
     private String _password;
     private LinkedList<String> offlineTweets = new LinkedList<>();
+    private DisplayImageOptions options;
+
+    // Implementation of singleton pattern
+    private static TwitterCopyCatApplication instance ;
 
     @Override
     public void onCreate()
     {
         super.onCreate();
+
+        // Implementation of singleton pattern
+        instance = this;
         _sharedPrefs = getSharedPreferences(SHARED_PREFS_FILENAME, Context.MODE_PRIVATE);
         if(isLogged()){
             _username = _sharedPrefs.getString(USERNAME, null);
             _password = _sharedPrefs.getString(PASSWORD, null);
         }
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .build();
+
+       options  = new DisplayImageOptions.Builder().cacheInMemory(true).build();
+        ImageLoader.getInstance().init(config);
+    }
+
+    // Implementation of singleton pattern
+    public static TwitterCopyCatApplication getInstance() {
+        return instance;
+    }
+
+    public DisplayImageOptions getOptions() {
+        return options;
     }
 
     public void saveCredentials(boolean toSave, String username, String password) {

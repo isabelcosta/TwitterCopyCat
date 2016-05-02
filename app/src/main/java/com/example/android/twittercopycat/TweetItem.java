@@ -5,23 +5,31 @@ import android.os.Parcelable;
 
 import com.orm.SugarRecord;
 
-import java.net.URI;
-
 public class TweetItem extends SugarRecord implements Parcelable {
     private long id;
     private String authorName;
-    private URI authorPicture;
+    private String authorPicture;
     private String authorDescription;
     private String date;
     private String text;
+    private static TweetItem t;
 
-    public TweetItem(long id, String author, URI authorPicture, String authorDescription, String date, String text){
+    public TweetItem(){
+
+    }
+
+    public TweetItem(long id, String author, String authorPicture, String authorDescription, String date, String text){
         this.id = id;
         this.authorName = author;
         this.date = date;
         this.text = text;
         this.authorPicture = authorPicture;
         this.authorDescription = authorDescription;
+        t = this;
+    }
+
+    public static void saveT(){
+        t.save();
     }
 
     public long getTweetId(){
@@ -30,7 +38,7 @@ public class TweetItem extends SugarRecord implements Parcelable {
     public String getTweetAuthorName () {
         return authorName;
     }
-    public URI getTweetAuthorPic(){
+    public String getTweetAuthorPic(){
         return authorPicture;
     }
     public String getTweetAuthorDesc(){
@@ -46,7 +54,8 @@ public class TweetItem extends SugarRecord implements Parcelable {
     protected TweetItem(Parcel in) {
         id = in.readLong();
         authorName = in.readString();
-        authorPicture = (URI) in.readValue(URI.class.getClassLoader());
+        //authorPicture = (URI) in.readValue(URI.class.getClassLoader());
+        authorPicture = in.readString();
         authorDescription = in.readString();
         date = in.readString();
         text = in.readString();
@@ -61,7 +70,7 @@ public class TweetItem extends SugarRecord implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeString(authorName);
-        dest.writeValue(authorPicture);
+        dest.writeString(authorPicture);
         dest.writeString(authorDescription);
         dest.writeString(date);
         dest.writeString(text);

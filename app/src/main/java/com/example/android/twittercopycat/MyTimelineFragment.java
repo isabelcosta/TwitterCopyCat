@@ -162,7 +162,7 @@ public class MyTimelineFragment extends Fragment {
                                 tweet.getId(),                          //id
                                 tweet.getUser().getName(),              //author's name
                                 //@TODO discover how to show the image
-                                tweet.getUser().getProfileImageUrl(),   //author's picture
+                                tweet.getUser().getProfileImageUrl().toString(),   //author's picture
                                 tweet.getUser().getDescription(),       //author's description
                                 tweet.getCreatedAt().toString(),        //date
                                 tweet.getText()                         //tweet text

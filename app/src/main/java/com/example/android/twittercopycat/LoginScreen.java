@@ -77,7 +77,7 @@ public class LoginScreen extends AppCompatActivity implements LoaderCallbacks<Cu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TwitterCopyCatApplication app = (TwitterCopyCatApplication) getApplication();
+        TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
 
         Intent i;
         if(app.isLogged()){
@@ -369,15 +369,6 @@ public class LoginScreen extends AppCompatActivity implements LoaderCallbacks<Cu
             Log.d(TAG, isLogged.toString());
 
             return isLogged;
-            /*
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-            */
 
             // TODO: register the new account here.
             // return true;
@@ -389,7 +380,7 @@ public class LoginScreen extends AppCompatActivity implements LoaderCallbacks<Cu
             showProgress(false);
 
             if (success) {
-                TwitterCopyCatApplication app = (TwitterCopyCatApplication) getApplication();
+                TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
                 app.saveCredentials(saveCredentialsCheckBox.isChecked(), mEmail, mPassword);
 
                 Intent intent = new Intent(getApplicationContext(), MyTimelineScreen.class);
