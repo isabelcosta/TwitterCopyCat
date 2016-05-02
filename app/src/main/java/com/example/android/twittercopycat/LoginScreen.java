@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -191,6 +192,14 @@ public class LoginScreen extends AppCompatActivity implements LoaderCallbacks<Cu
             return;
         }
 
+        if (!TwitterCopyCatApplication.getInstance().isNetworkAvailable()) {
+            Toast.makeText(
+                    getApplicationContext(),
+                    "No internet connection. \nCheck your internet connection, please!",
+                    Toast.LENGTH_SHORT
+            ).show();
+            return;
+        }
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
