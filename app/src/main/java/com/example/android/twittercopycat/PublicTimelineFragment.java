@@ -141,11 +141,11 @@ public class PublicTimelineFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(((TwitterCopyCatApplication) getActivity().getApplication()).isNetworkAvailable()){
-            updateTweets();
+        if(TwitterCopyCatApplication.getInstance().isNetworkAvailable()){
+            updateTweets(false);
         } else {
             Toast.makeText(getContext(), "No internet connection", Toast.LENGTH_LONG).show();
-            fillAdapterWithOfflineTweets();
+            updateTweets(true);
             // Get Tweets from DB
         }
     }
@@ -165,29 +165,21 @@ public class PublicTimelineFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void updateTweets() {
-        FetchPublicTweetTask tweetTask = new FetchPublicTweetTask(getActivity(), publicTimeline);
-        tweetTask.execute();
-    }
-
-    private void fillAdapterWithOnlineTweets(){
-        if (mListAdapter != null) {
-            mListAdapter.clear();
-
-            //erase old tweets from database
-            //TweetItem.deleteAll(TweetItem.class);
-
-            for(TweetItem tweet : publicTimeline) {
-                mListAdapter.add(tweet);
-            }
+    private void updateTweets(boolean offline) {
+        if(offline){
+            FetchPublicOfflineTweetTask tweetTask = new FetchPublicOfflineTweetTask(getActivity(), publicTimeline);
+            tweetTask.execute();
+        } else {
+            FetchPublicOnlineTweetTask tweetTask = new FetchPublicOnlineTweetTask(getActivity(), publicTimeline);
+            tweetTask.execute();
         }
     }
 
-    private void fillAdapterWithOfflineTweets(){
+    private void fillAdapterWithTweets(){
         if (mListAdapter != null) {
             mListAdapter.clear();
-            List<TweetItem> publicOfflineTimeline =  TweetItem.listAll(TweetItem.class);
-            for(TweetItem tweet : publicOfflineTimeline) {
+
+            for(TweetItem tweet : publicTimeline) {
                 mListAdapter.add(tweet);
             }
         }
@@ -231,17 +223,19 @@ public class PublicTimelineFragment extends Fragment {
         return format.format(date).toString();
     }
 
-    public class FetchPublicTweetTask extends AsyncTask<Void, Void, List<TweetItem>> {
+    /**
+     * Tweet Online Fetching
+     */
+    public class FetchPublicOnlineTweetTask extends AsyncTask<Void, Void, List<TweetItem>> {
 
-        private final String LOG_TAG = FetchPublicTweetTask.class.getSimpleName();
+        private final String LOG_TAG = FetchPublicOnlineTweetTask.class.getSimpleName();
         private final int maxPubTweets = 10;
         private final String apiUrl = "http://yamba.newcircle.com/api";
 
-        private PublicTimelineFragment.ListScreenAdapter mTweetAdapter;
         private final Context mContext;
         private List<TweetItem> timeline;
 
-        public FetchPublicTweetTask(Context context, List<TweetItem> givenTimeline) {
+        public FetchPublicOnlineTweetTask(Context context, List<TweetItem> givenTimeline) {
             mContext = context;
             timeline = givenTimeline;
         }
@@ -260,17 +254,9 @@ public class PublicTimelineFragment extends Fragment {
                 return null;
             }
 
-//
-//            for(TweetItem twiii : tweets){
-//                twiii.delete();
-//            }
-
             //erase old tweets from database
             TweetItem.deleteAll(TweetItem.class);
-            //TweetItem.saveT();
 
-            List<TweetItem> tweets = TweetItem.listAll(TweetItem.class);
-            tweets.size();
             List<TweetItem> TweetItems = new LinkedList<>();
 
             for(Twitter.Status tweet : fetchedTimeline) {
@@ -300,7 +286,51 @@ public class PublicTimelineFragment extends Fragment {
                 }
                 // New data is back from the server.  Hooray!
             }
-            fillAdapterWithOnlineTweets();
+            fillAdapterWithTweets();
+        }
+    }
+
+    /**
+     * Tweet Offline Fetching
+     */
+    public class FetchPublicOfflineTweetTask extends AsyncTask<Void, Void, List<TweetItem>> {
+
+        private final String LOG_TAG = FetchPublicOfflineTweetTask.class.getSimpleName();
+
+        private final Context mContext;
+        private List<TweetItem> timeline;
+
+        public FetchPublicOfflineTweetTask(Context context, List<TweetItem> givenTimeline) {
+            mContext = context;
+            timeline = givenTimeline;
+        }
+
+        private boolean DEBUG = true;
+
+        @Override
+        protected List<TweetItem> doInBackground(Void... params) {
+
+            List<TweetItem> fetchedTimeline = TweetItem.listAll(TweetItem.class, "id");
+
+            if(fetchedTimeline == null){
+                return null;
+            }
+
+            return fetchedTimeline;
+        }
+
+        @Override
+        protected void onPostExecute(List<TweetItem> result) {
+
+            if (result != null) {
+                Log.d(LOG_TAG, "I GOT SOMETHING FROM SERVER");
+                timeline.clear();
+                for(TweetItem tweet : result) {
+                    timeline.add(tweet);
+                }
+                // New data is back from the server.  Hooray!
+            }
+            fillAdapterWithTweets();
         }
     }
 }

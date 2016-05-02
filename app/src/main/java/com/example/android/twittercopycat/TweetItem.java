@@ -12,7 +12,6 @@ public class TweetItem extends SugarRecord implements Parcelable {
     private String authorDescription;
     private String date;
     private String text;
-    private static TweetItem t;
 
     public TweetItem(){
 
@@ -25,11 +24,6 @@ public class TweetItem extends SugarRecord implements Parcelable {
         this.text = text;
         this.authorPicture = authorPicture;
         this.authorDescription = authorDescription;
-        t = this;
-    }
-
-    public static void saveT(){
-        t.save();
     }
 
     public long getTweetId(){
