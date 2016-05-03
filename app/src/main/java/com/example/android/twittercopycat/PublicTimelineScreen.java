@@ -9,16 +9,11 @@ public class PublicTimelineScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_public_timeline_screen);
-//        if(((TwitterCopyCatApplication)getApplication()).isInternetAvailable()){
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.container, new PublicTimelineFragment())
                         .commit();
             }
-//        } else {
-//            Toast.makeText(getBaseContext(), "no internet connection", Toast.LENGTH_LONG).show();
-//
-//        }
 
     }
 }

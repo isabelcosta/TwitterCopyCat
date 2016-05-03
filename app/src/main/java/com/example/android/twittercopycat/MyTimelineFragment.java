@@ -2,14 +2,12 @@ package com.example.android.twittercopycat;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,21 +29,9 @@ import winterwell.jtwitter.Twitter;
  * Use the {@link PublicTimelineFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyTimelineFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
-
-    // TODO: Rename and change types of parameters
-    private String username;
-    private String password;
+public class MyTimelineFragment extends TimelineFragment {
 
     private OnFragmentInteractionListener mListener;
-
-    private ListView mListView;
-    private ListScreenAdapter mListAdapter;
-    private List<Twitter.Status> myTimeline;
 
     public MyTimelineFragment() {
         // Required empty public constructor
@@ -72,12 +58,6 @@ public class MyTimelineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            username = getArguments().getString(USERNAME);
-            password = getArguments().getString(PASSWORD);
-        }
-
-        myTimeline = new ArrayList<Twitter.Status>();
     }
 
     @Override
@@ -127,7 +107,6 @@ public class MyTimelineFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        updateTweets();
     }
 
     /**
@@ -145,103 +124,36 @@ public class MyTimelineFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void updateTweets() {
-        FetchMyTweetTask tweetTask = new FetchMyTweetTask(getActivity(), myTimeline);
-        Bundle args = new Bundle();
-        args.putString(USERNAME, username);
-        args.putString(PASSWORD, password);
-        tweetTask.execute(args);
+    @Override
+    protected View getMyView(TweetItem item, LayoutInflater layoutInflater) {
+        View v = layoutInflater.inflate(R.layout.list_item_my_tweet, null);
+
+        TextView tvDate = (TextView) v.findViewById(R.id.list_item_tweet_date);
+        tvDate.setText(item.getTweetDate());
+
+        TextView tvText = (TextView) v.findViewById(R.id.list_item_tweet_text);
+        tvText.setText(item.getTweetText()); //should only show first 20 characters
+
+        return v;
     }
 
-    private void fillAdapterWithTweets(){
-        if (mListAdapter != null) {
-            mListAdapter.clear();
-            for(Twitter.Status tweet : myTimeline) {
-                mListAdapter.add(
-                        new TweetItem(
-                                tweet.getId(),                          //id
-                                tweet.getUser().getName(),              //author's name
-                                //@TODO discover how to show the image
-                                tweet.getUser().getProfileImageUrl().toString(),   //author's picture
-                                tweet.getUser().getDescription(),       //author's description
-                                tweet.getCreatedAt().toString(),        //date
-                                tweet.getText()                         //tweet text
-                        )
-                );
-            }
-        }
+    @Override
+    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG, int maxMyTweets) {
+        String username = params.getString(USERNAME);
+        String password = params.getString(PASSWORD);
+        Twitter t = new Twitter(username, password);
+
+        Log.d(LOG_TAG, "USERNAME: " + username);
+        Log.d(LOG_TAG, "PASSWORD: " + password);
+
+        t.setAPIRootUrl(API_URL);
+        t.setCount(maxMyTweets);
+        return t.getUserTimeline();
     }
 
-    public class ListScreenAdapter extends ArrayAdapter<TweetItem> {
-        public ListScreenAdapter(Context context, int resourceId, ArrayList<TweetItem> objects) {
-            super(context , resourceId, objects) ;
-        }
-
-        @Override
-        public View getView(int position , View convertView , ViewGroup parent) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext()) ;
-            View v = layoutInflater.inflate(R.layout.list_item_my_tweet, null);
-
-            TweetItem item = getItem(position) ;
-
-            TextView tvDate = (TextView) v.findViewById(R.id.list_item_tweet_date);
-            tvDate.setText(item.getTweetDate());
-
-            TextView tvText = (TextView) v.findViewById(R.id.list_item_tweet_text);
-            tvText.setText(item.getTweetText()); //should only show first 20 characters
-
-            return v;
-        }
-    }
-
-    public class FetchMyTweetTask extends AsyncTask<Bundle, Void, List<Twitter.Status>> {
-
-        private final String LOG_TAG = FetchMyTweetTask.class.getSimpleName();
-        private final int maxMyTweets = 5;
-        private final String apiUrl = "http://yamba.newcircle.com/api";
-
-        private PublicTimelineFragment.ListScreenAdapter mTweetAdapter;
-        private final Context mContext;
-        private List<Twitter.Status> timeline;
-
-        public FetchMyTweetTask(Context context, List<Twitter.Status> givenTimeline) {
-            mContext = context;
-            timeline = givenTimeline;
-        }
-
-        private boolean DEBUG = true;
-
-        @Override
-        protected List<Twitter.Status> doInBackground(Bundle... params) {
-
-            String username = params[0].getString(USERNAME);
-            String password = params[0].getString(PASSWORD);
-            Twitter t = new Twitter(username, password);
-
-            Log.d(LOG_TAG, "USERNAME: " + username);
-            Log.d(LOG_TAG, "PASSWORD: " + password);
-
-            t.setAPIRootUrl(apiUrl);
-            t.setCount(maxMyTweets);
-            List<Twitter.Status> fetchedTimeline = t.getUserTimeline();
-            Log.d(LOG_TAG, String.valueOf(fetchedTimeline == null));
-
-            return fetchedTimeline;
-        }
-
-        @Override
-        protected void onPostExecute(List<Twitter.Status> result) {
-
-            if (result != null) {
-                Log.d(LOG_TAG, "I GOT SOMETHING FROM SERVER");
-                timeline.clear();
-                for(Twitter.Status tweet : result) {
-                    timeline.add(tweet);
-                }
-                // New data is back from the server.  Hooray!
-            }
-            fillAdapterWithTweets();
-        }
+    @Override
+    protected boolean isPublic() {
+        return false;
     }
 }
 

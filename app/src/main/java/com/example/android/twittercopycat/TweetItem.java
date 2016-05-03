@@ -12,18 +12,20 @@ public class TweetItem extends SugarRecord implements Parcelable {
     private String authorDescription;
     private String date;
     private String text;
+    private boolean isPublic;
 
     public TweetItem(){
 
     }
 
-    public TweetItem(long id, String author, String authorPicture, String authorDescription, String date, String text){
+    public TweetItem(long id, String author, String authorPicture, String authorDescription, String date, String text, boolean isPublic){
         this.id = id;
         this.authorName = author;
         this.date = date;
         this.text = text;
         this.authorPicture = authorPicture;
         this.authorDescription = authorDescription;
+        this.isPublic = isPublic;
     }
 
     public long getTweetId(){
@@ -43,6 +45,9 @@ public class TweetItem extends SugarRecord implements Parcelable {
     }
     public String getTweetText () {
         return text;
+    }
+    public boolean getTweetIsPublic () {
+        return isPublic;
     }
 
     protected TweetItem(Parcel in) {

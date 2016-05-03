@@ -41,7 +41,7 @@ public class MyTimelineScreen extends AppCompatActivity {
         addViewListeners();
         maxCharacters = getResources().getInteger(R.integer.max_characters);
 
-        TwitterCopyCatApplication app = (TwitterCopyCatApplication) getApplication();
+        TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, MyTimelineFragment.newInstance(app.getUsername(), app.getPassword()))
@@ -122,7 +122,7 @@ public class MyTimelineScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MyTimelineFragment frag = (MyTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.container);
-                frag.updateTweets();
+                frag.updateTweets(!TwitterCopyCatApplication.getInstance().isNetworkAvailable());
           }
         });
     }
@@ -171,7 +171,7 @@ public class MyTimelineScreen extends AppCompatActivity {
                 // Sent successfully the tweet.  Hooray!
                 Toast.makeText(mContext, "Your Tweet was sent!", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(mContext, "Your Tweet couldn't be sent now. Will'll send it later ;) ", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "Your Tweet couldn't be sent now. We'll send it later ;) ", Toast.LENGTH_LONG).show();
             }
 
             //clear the text box

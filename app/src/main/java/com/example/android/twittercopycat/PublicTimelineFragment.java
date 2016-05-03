@@ -3,23 +3,16 @@ package com.example.android.twittercopycat;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import winterwell.jtwitter.Twitter;
@@ -33,7 +26,7 @@ import winterwell.jtwitter.Twitter;
  * Use the {@link PublicTimelineFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PublicTimelineFragment extends Fragment {
+public class PublicTimelineFragment extends TimelineFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -42,47 +35,41 @@ public class PublicTimelineFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    private ListView mListView;
-    private ListScreenAdapter mListAdapter;
-    private List<TweetItem> publicTimeline;
+//
+//    private OnFragmentInteractionListener mListener;
+//
+//    private ListView mListView;
+//    private ListScreenAdapter mListAdapter;
     private int maxCharacters = 20;
+
+    private boolean isPublic = false;
 
     public PublicTimelineFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PublicTimelineFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PublicTimelineFragment newInstance(String param1, String param2) {
-        PublicTimelineFragment fragment = new PublicTimelineFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//
+//    /**
+//     * Use this factory method to create a new instance of
+//     * this fragment using the provided parameters.
+//     *
+//     * @param param1 Parameter 1.
+//     * @param param2 Parameter 2.
+//     * @return A new instance of fragment PublicTimelineFragment.
+//     */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        publicTimeline = new ArrayList<TweetItem>();
     }
-
+    // TODO: Rename and change types and number of parameters
+//    public static PublicTimelineFragment newInstance(String param1, String param2) {
+//        PublicTimelineFragment fragment = new PublicTimelineFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -141,13 +128,6 @@ public class PublicTimelineFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(TwitterCopyCatApplication.getInstance().isNetworkAvailable()){
-            updateTweets(false);
-        } else {
-            Toast.makeText(getContext(), "No internet connection", Toast.LENGTH_LONG).show();
-            updateTweets(true);
-            // Get Tweets from DB
-        }
     }
 
     /**
@@ -165,172 +145,36 @@ public class PublicTimelineFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void updateTweets(boolean offline) {
-        if(offline){
-            FetchPublicOfflineTweetTask tweetTask = new FetchPublicOfflineTweetTask(getActivity(), publicTimeline);
-            tweetTask.execute();
-        } else {
-            FetchPublicOnlineTweetTask tweetTask = new FetchPublicOnlineTweetTask(getActivity(), publicTimeline);
-            tweetTask.execute();
-        }
+    @Override
+    protected View getMyView(TweetItem item, LayoutInflater layoutInflater) {
+        View v = layoutInflater.inflate(R.layout.list_item_public_tweet, null);
+
+        TextView tvAuthor = (TextView) v.findViewById(R.id.list_item_tweet_author);
+        tvAuthor.setText(item.getTweetAuthorName());
+
+        TextView tvDate = (TextView) v.findViewById(R.id.list_item_tweet_date);
+        tvDate.setText(item.getTweetDate());
+
+        TextView tvText = (TextView) v.findViewById(R.id.list_item_tweet_text);
+        tvText.setText(
+                item.getTweetText().length() >= maxCharacters
+                        ? item.getTweetText().substring(0, maxCharacters - 1)
+                        : item.getTweetText()); //should only show first 20 characters
+
+        return v;
     }
 
-    private void fillAdapterWithTweets(){
-        if (mListAdapter != null) {
-            mListAdapter.clear();
+    @Override
+    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG, int maxTweets) {
 
-            for(TweetItem tweet : publicTimeline) {
-                mListAdapter.add(tweet);
-            }
-        }
+        Twitter t = new Twitter();
+        t.setAPIRootUrl(API_URL);
+        t.setCount(maxTweets);
+        return t.getPublicTimeline();
     }
 
-    public class ListScreenAdapter extends ArrayAdapter<TweetItem> {
-        public ListScreenAdapter(Context context, int resourceId, ArrayList<TweetItem> objects) {
-            super(context , resourceId, objects) ;
-        }
-
-        @Override
-        public View getView(int position , View convertView , ViewGroup parent) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext()) ;
-            View v = layoutInflater.inflate(R.layout.list_item_public_tweet, null);
-
-            TweetItem item = getItem(position) ;
-
-            TextView tvAuthor = (TextView) v.findViewById(R.id.list_item_tweet_author);
-            tvAuthor.setText(item.getTweetAuthorName());
-
-            TextView tvDate = (TextView) v.findViewById(R.id.list_item_tweet_date);
-            tvDate.setText(item.getTweetDate());
-
-            TextView tvText = (TextView) v.findViewById(R.id.list_item_tweet_text);
-            tvText.setText(
-                    item.getTweetText().length() >= maxCharacters
-                    ? item.getTweetText().substring(0, maxCharacters - 1)
-                    : item.getTweetText()); //should only show first 20 characters
-
-            return v;
-        }
-    }
-
-    /* The date/time conversion code is going to be moved outside the asynctask later,
-     * so for convenience we're breaking it out into its own method now.
-     */
-    private String getReadableDateString(Date date){
-        // Because the API returns a unix timestamp (measured in seconds),
-        // it must be converted to milliseconds in order to be converted to valid date.
-        SimpleDateFormat format = new SimpleDateFormat("E, MMM d");
-        return format.format(date).toString();
-    }
-
-    /**
-     * Tweet Online Fetching
-     */
-    public class FetchPublicOnlineTweetTask extends AsyncTask<Void, Void, List<TweetItem>> {
-
-        private final String LOG_TAG = FetchPublicOnlineTweetTask.class.getSimpleName();
-        private final int maxPubTweets = 10;
-        private final String apiUrl = "http://yamba.newcircle.com/api";
-
-        private final Context mContext;
-        private List<TweetItem> timeline;
-
-        public FetchPublicOnlineTweetTask(Context context, List<TweetItem> givenTimeline) {
-            mContext = context;
-            timeline = givenTimeline;
-        }
-
-        private boolean DEBUG = true;
-
-        @Override
-        protected List<TweetItem> doInBackground(Void... params) {
-
-            Twitter t = new Twitter();
-            t.setAPIRootUrl(apiUrl);
-            t.setCount(maxPubTweets);
-            List<Twitter.Status> fetchedTimeline = t.getPublicTimeline();
-
-            if(fetchedTimeline == null){
-                return null;
-            }
-
-            //erase old tweets from database
-            TweetItem.deleteAll(TweetItem.class);
-
-            List<TweetItem> TweetItems = new LinkedList<>();
-
-            for(Twitter.Status tweet : fetchedTimeline) {
-                TweetItem newTweet = new TweetItem(
-                        tweet.getId(),                                      //id
-                        tweet.getUser().getName(),                          //author's name
-                        tweet.getUser().getProfileImageUrl().toString(),    //author's picture
-                        tweet.getUser().getDescription(),                   //author's description
-                        tweet.getCreatedAt().toString(),                    //date
-                        tweet.getText()                                     //tweet text
-                );
-                TweetItems.add(newTweet);
-                newTweet.save();
-            }
-
-            return TweetItems;
-        }
-
-        @Override
-        protected void onPostExecute(List<TweetItem> result) {
-
-            if (result != null) {
-                Log.d(LOG_TAG, "I GOT SOMETHING FROM SERVER");
-                timeline.clear();
-                for(TweetItem tweet : result) {
-                    timeline.add(tweet);
-                }
-                // New data is back from the server.  Hooray!
-            }
-            fillAdapterWithTweets();
-        }
-    }
-
-    /**
-     * Tweet Offline Fetching
-     */
-    public class FetchPublicOfflineTweetTask extends AsyncTask<Void, Void, List<TweetItem>> {
-
-        private final String LOG_TAG = FetchPublicOfflineTweetTask.class.getSimpleName();
-
-        private final Context mContext;
-        private List<TweetItem> timeline;
-
-        public FetchPublicOfflineTweetTask(Context context, List<TweetItem> givenTimeline) {
-            mContext = context;
-            timeline = givenTimeline;
-        }
-
-        private boolean DEBUG = true;
-
-        @Override
-        protected List<TweetItem> doInBackground(Void... params) {
-
-            List<TweetItem> fetchedTimeline = TweetItem.listAll(TweetItem.class, "id");
-
-            if(fetchedTimeline == null){
-                return null;
-            }
-
-            return fetchedTimeline;
-        }
-
-        @Override
-        protected void onPostExecute(List<TweetItem> result) {
-
-            if (result != null) {
-                Log.d(LOG_TAG, "I GOT SOMETHING FROM SERVER");
-                timeline.clear();
-                for(TweetItem tweet : result) {
-                    timeline.add(tweet);
-                }
-                // New data is back from the server.  Hooray!
-            }
-            fillAdapterWithTweets();
-        }
+    @Override
+    protected boolean isPublic() {
+        return true;
     }
 }
