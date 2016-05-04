@@ -149,4 +149,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_to_my_timeline">Welcome to my Timeline</string>
+    <string name="tweet">Tweet</string>
 </resources>

@@ -21,45 +21,65 @@
                 android:layout_marginBottom="5dp"
                 android:id="@+id/tweetField">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/welcome_to_my_timeline"
-                    android:id="@+id/textView_tweet"
-                    android:layout_marginBottom="5dp" />
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+                    <!--android:text="@string/welcome_to_my_timeline"-->
+                    <!--android:id="@+id/textView_tweet"-->
+                    <!--android:layout_marginBottom="5dp" />-->
 
                 <LinearLayout
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <EditText
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/editText_tweet"
-                        android:textSize="17sp"
-                        android:hint="@string/max_characters"
-                        android:maxLength="@integer/max_characters"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_weight="1"
-                        android:paddingBottom="15dp"
-                        android:paddingTop="15dp"/>
+                        android:orientation="vertical">
 
-                    <Button
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/editText_tweet"
+                            android:textSize="17sp"
+                            android:hint="@string/max_characters"
+                            android:maxLength="@integer/max_characters"
+                            android:layout_gravity="center_horizontal"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:text="@integer/max_characters"
+                            android:id="@+id/tweet_number_of_characters"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tweet"
-                        android:id="@+id/button_send_tweet" />
-                </LinearLayout>
+                        android:orientation="horizontal"
+                        android:weightSum="1">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="@integer/max_characters"
-                    android:id="@+id/tweet_number_of_characters"/>
+                        <Button
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tweet"
+                            android:layout_weight="0.9"
+                            android:id="@+id/button_send_tweet" />
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:id="@+id/share_tweet"
+                            android:layout_marginLeft="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_share"/>
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -67,7 +87,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="326dp"
+                android:layout_height="match_parent"
                 android:layout_below="@id/tweetField"
                 tools:context=".PublicTimelineScreen"
                 tools:ignore="MergeRootFrame" />

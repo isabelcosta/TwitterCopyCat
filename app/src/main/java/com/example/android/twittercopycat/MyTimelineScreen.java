@@ -115,6 +115,8 @@ public class MyTimelineScreen extends AppCompatActivity {
 
     private void addViewListeners(){
 
+        // TODO: 04-05-2016 add listener to share icon!!! and change its color 
+
         sendTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
