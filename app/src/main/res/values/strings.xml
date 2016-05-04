@@ -132,6 +132,20 @@
     <string name="save_credentials">Save credentials</string>
     <string name="max_characters">Max number of characters is 140</string>
 
+    <!--Constants-->
+
+    <string name="api_url">http://yamba.newcircle.com/api</string>
+
+    <!--Dialog text-->
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="are_you_sure">Are you sure?</string>
+
+    <!--Error messages-->
+
+    <string name="invalid_number_of_characters">Invalid number of characters</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_to_my_timeline">Welcome to my Timeline</string>

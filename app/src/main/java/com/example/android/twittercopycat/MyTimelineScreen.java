@@ -28,20 +28,25 @@ public class MyTimelineScreen extends AppCompatActivity {
     private Button sendTweet;
     private EditText tweetText;
     private TextView numberOfCharacters;
-    private int maxCharacters;
-
+    private int tweetMaxCharacters;
+    private TwitterCopyCatApplication app;
     private static final String TAG = "MyTimelineScreen";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //attributes definition
+        tweetMaxCharacters = getResources().getInteger(R.integer.max_characters);
+        app = TwitterCopyCatApplication.getInstance();
+
         setContentView(R.layout.activity_my_timeline);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        //find views and adding listeners
         findViews();
         addViewListeners();
-        maxCharacters = getResources().getInteger(R.integer.max_characters);
 
-        TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, MyTimelineFragment.newInstance(app.getUsername(), app.getPassword()))
@@ -60,7 +65,6 @@ public class MyTimelineScreen extends AppCompatActivity {
                         switch (which){
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
-                                TwitterCopyCatApplication app = (TwitterCopyCatApplication) getApplication();
                                 app.saveCredentials(false, null, null);
 
                                 Intent intent = new Intent(view.getContext(), LoginScreen.class);
@@ -76,8 +80,8 @@ public class MyTimelineScreen extends AppCompatActivity {
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MyTimelineScreen.this);
-                builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
+                builder.setMessage(getString(R.string.are_you_sure)).setPositiveButton(getString(R.string.yes), dialogClickListener)
+                        .setNegativeButton(getString(R.string.no), dialogClickListener).show();
             }
         });
 
@@ -89,13 +93,22 @@ public class MyTimelineScreen extends AppCompatActivity {
 
                 if(tweet.length() < 1 || tweet.length() > 140) {
                     Context context = getApplicationContext();
-                    CharSequence text = "Numero invalido de caracteres";
+                    CharSequence text = getString(R.string.invalid_number_of_characters);
                     int duration = Toast.LENGTH_SHORT;
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                 } else {
-                    SendTweetTask tweetTask = new SendTweetTask(getApplicationContext());
-                    tweetTask.execute(tweet);
+                    if(app.isNetworkAvailable()){
+                        SendTweetTask tweetTask = new SendTweetTask(getApplicationContext());
+                        tweetTask.execute(tweet);
+                    } else {
+                        Toast.makeText(
+                                getApplicationContext(),
+                                "Your Tweet couldn't be sent now. We'll send it later ;)",
+                                Toast.LENGTH_LONG
+                        ).show();
+                        app.addOfflineTweet(tweet);
+                    }
                 }
             }
         });
@@ -114,7 +127,7 @@ public class MyTimelineScreen extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                numberOfCharacters.setText(String.valueOf(maxCharacters - s.length()));
+                numberOfCharacters.setText(String.valueOf(tweetMaxCharacters - s.length()));
             }
         });
 
@@ -122,7 +135,7 @@ public class MyTimelineScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MyTimelineFragment frag = (MyTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.container);
-                frag.updateTweets(!TwitterCopyCatApplication.getInstance().isNetworkAvailable());
+                frag.updateTweets(!app.isNetworkAvailable());
           }
         });
     }
@@ -138,7 +151,8 @@ public class MyTimelineScreen extends AppCompatActivity {
     public class SendTweetTask extends AsyncTask<String, Void, Boolean> {
 
         private final String LOG_TAG = SendTweetTask.class.getSimpleName();
-        private final String apiUrl = "http://yamba.newcircle.com/api";
+        // TODO: 04-05-2016 define api_url on strings.xml
+        private final String apiUrl = getString(R.string.api_url);
 
         private final Context mContext;
 
@@ -152,12 +166,11 @@ public class MyTimelineScreen extends AppCompatActivity {
         protected Boolean doInBackground(String... tweet) {
 
             try{
-                TwitterCopyCatApplication app = (TwitterCopyCatApplication) getApplication();
                 //@TODO set username and password on application when login
                 Twitter t = new Twitter(app.getUsername(), app.getPassword());
                 t.setAPIRootUrl(apiUrl);
                 t.updateStatus(tweet[0]);
-                Log.d(LOG_TAG, "Sending a tweet");
+                Log.d(LOG_TAG, "Sending this tweet: " + tweet[0]);
             } catch (TwitterException e){
                 return false;
             }
@@ -172,6 +185,7 @@ public class MyTimelineScreen extends AppCompatActivity {
                 Toast.makeText(mContext, "Your Tweet was sent!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(mContext, "Your Tweet couldn't be sent now. We'll send it later ;) ", Toast.LENGTH_LONG).show();
+                //app.addOfflineTweet(tweet);
             }
 
             //clear the text box

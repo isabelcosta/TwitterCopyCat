@@ -38,16 +38,19 @@ public class TwitterCopyCatApplication extends SugarApp {
 
         // Implementation of singleton pattern
         instance = this;
+
+        // Get credentials in case the user saved credentials
         _sharedPrefs = getSharedPreferences(SHARED_PREFS_FILENAME, Context.MODE_PRIVATE);
         if(isLogged()){
             _username = _sharedPrefs.getString(USERNAME, null);
             _password = _sharedPrefs.getString(PASSWORD, null);
         }
 
+        //Image Loader
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .build();
 
-       options  = new DisplayImageOptions.Builder().cacheInMemory(true).build();
+        options  = new DisplayImageOptions.Builder().cacheInMemory(true).build();
         ImageLoader.getInstance().init(config);
     }
 

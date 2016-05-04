@@ -39,10 +39,6 @@ public class TimelineFragment extends Fragment {
     protected static final String PASSWORD = "password";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    // TODO: Rename and change types of parameters
     protected String username;
     protected String password;
 
@@ -53,6 +49,8 @@ public class TimelineFragment extends Fragment {
     protected List<TweetItem> timeline;
     protected int maxCharacters = 20;
     protected static String API_URL = "http://yamba.newcircle.com/api";
+    protected TwitterCopyCatApplication app;
+
 
     public TimelineFragment() {
         // Required empty public constructor
@@ -79,6 +77,9 @@ public class TimelineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        app = TwitterCopyCatApplication.getInstance();
+
         if (getArguments() != null) {
             username = getArguments().getString(USERNAME);
             password = getArguments().getString(PASSWORD);
@@ -145,7 +146,7 @@ public class TimelineFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(TwitterCopyCatApplication.getInstance().isNetworkAvailable()){
+        if(app.isNetworkAvailable()){
             updateTweets(false);
         } else {
             Toast.makeText(getContext(), "No internet connection", Toast.LENGTH_LONG).show();
