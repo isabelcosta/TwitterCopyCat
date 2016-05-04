@@ -26,8 +26,6 @@ import winterwell.jtwitter.TwitterException;
 public class MyTimelineScreen extends AppCompatActivity {
 
     // Views
-//    private Button signOutBtn;
-//    private Button refreshBtn;
     private Button sendTweet;
     private EditText tweetText;
     private TextView numberOfCharacters;
@@ -116,13 +114,6 @@ public class MyTimelineScreen extends AppCompatActivity {
     }
 
     private void addViewListeners(){
-//        signOutBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(final View view) {
-//
-//            }
-//        });
-
 
         sendTweet.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,19 +159,9 @@ public class MyTimelineScreen extends AppCompatActivity {
                 numberOfCharacters.setText(String.valueOf(tweetMaxCharacters - s.length()));
             }
         });
-
-//        refreshBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                MyTimelineFragment frag = (MyTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.container);
-//                frag.updateTweets(!app.isNetworkAvailable());
-//          }
-//        });
     }
 
     private void findViews(){
-//        signOutBtn = (Button) findViewById(R.id.button_sign_out);
-//        refreshBtn = (Button) findViewById(R.id.button_refresh);
         sendTweet = (Button) findViewById(R.id.button_send_tweet);
         tweetText = (EditText) findViewById(R.id.editText_tweet);
         numberOfCharacters = (TextView) findViewById(R.id.tweet_number_of_characters);
