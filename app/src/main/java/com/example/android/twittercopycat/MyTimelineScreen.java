@@ -26,8 +26,8 @@ import winterwell.jtwitter.TwitterException;
 public class MyTimelineScreen extends AppCompatActivity {
 
     // Views
-    private Button signOutBtn;
-    private Button refreshBtn;
+//    private Button signOutBtn;
+//    private Button refreshBtn;
     private Button sendTweet;
     private EditText tweetText;
     private TextView numberOfCharacters;
@@ -69,49 +69,59 @@ public class MyTimelineScreen extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_refresh:
-//                newGame();
+                menuRefresh();
                 return true;
             case R.id.menu_settings:
-//                showHelp();
+                menuSettings();
                 return true;
             case R.id.menu_logout:
-//                showHelp();
+                menuSignOut();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void addViewListeners(){
-        signOutBtn.setOnClickListener(new View.OnClickListener() {
+    // Menu Action Methods
+    private void menuRefresh(){
+        MyTimelineFragment frag = (MyTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+        frag.updateTweets(!app.isNetworkAvailable());
+    }
+    private void menuSettings(){}
+    private void menuSignOut(){
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(final View view) {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+                        app.saveCredentials(false, null, null);
 
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                //Yes button clicked
-                                app.saveCredentials(false, null, null);
+                        Intent intent = new Intent(getApplicationContext(), LoginScreen.class);
+                        startActivity(intent);
+                        finish();
+                        break;
 
-                                Intent intent = new Intent(view.getContext(), LoginScreen.class);
-                                startActivity(intent);
-                                finish();
-                                break;
-
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
-                                break;
-                        }
-                    }
-                };
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(MyTimelineScreen.this);
-                builder.setMessage(getString(R.string.are_you_sure)).setPositiveButton(getString(R.string.yes), dialogClickListener)
-                        .setNegativeButton(getString(R.string.no), dialogClickListener).show();
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
             }
-        });
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MyTimelineScreen.this);
+        builder.setMessage(getString(R.string.are_you_sure)).setPositiveButton(getString(R.string.yes), dialogClickListener)
+                .setNegativeButton(getString(R.string.no), dialogClickListener).show();
+    }
+
+    private void addViewListeners(){
+//        signOutBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(final View view) {
+//
+//            }
+//        });
 
 
         sendTweet.setOnClickListener(new View.OnClickListener() {
@@ -159,18 +169,18 @@ public class MyTimelineScreen extends AppCompatActivity {
             }
         });
 
-        refreshBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyTimelineFragment frag = (MyTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.container);
-                frag.updateTweets(!app.isNetworkAvailable());
-          }
-        });
+//        refreshBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                MyTimelineFragment frag = (MyTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+//                frag.updateTweets(!app.isNetworkAvailable());
+//          }
+//        });
     }
 
     private void findViews(){
-        signOutBtn = (Button) findViewById(R.id.button_sign_out);
-        refreshBtn = (Button) findViewById(R.id.button_refresh);
+//        signOutBtn = (Button) findViewById(R.id.button_sign_out);
+//        refreshBtn = (Button) findViewById(R.id.button_refresh);
         sendTweet = (Button) findViewById(R.id.button_send_tweet);
         tweetText = (EditText) findViewById(R.id.editText_tweet);
         numberOfCharacters = (TextView) findViewById(R.id.tweet_number_of_characters);
