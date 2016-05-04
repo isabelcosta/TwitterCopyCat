@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -51,6 +54,31 @@ public class MyTimelineScreen extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, MyTimelineFragment.newInstance(app.getUsername(), app.getPassword()))
                     .commit();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_my_timeline, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_refresh:
+//                newGame();
+                return true;
+            case R.id.menu_settings:
+//                showHelp();
+                return true;
+            case R.id.menu_logout:
+//                showHelp();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
