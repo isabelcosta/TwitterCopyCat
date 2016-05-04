@@ -103,6 +103,8 @@ public class TwitterCopyCatApplication extends SugarApp {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        //should check null because in air plan mode it will be null
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
