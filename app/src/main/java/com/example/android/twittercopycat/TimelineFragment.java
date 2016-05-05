@@ -255,8 +255,9 @@ public class TimelineFragment extends Fragment {
                 return null;
             }
 
-            //erase old tweets from database
-            TweetItem.deleteAll(TweetItem.class);
+            //delete old tweets from database
+            //TweetItem.deleteAll(TweetItem.class);
+            deleteOldTweets();
 
             List<TweetItem> TweetItems = new LinkedList<>();
 
@@ -341,10 +342,20 @@ public class TimelineFragment extends Fragment {
     }
 
     protected List<TweetItem> getFetchedOfflineTimeline() {
-// TODO: 03-05-2016 find function doens't work returns empty array - size = 0 
-        List<TweetItem> t1 = TweetItem.listAll(TweetItem.class, "id");
-        List<TweetItem> t2 = TweetItem.find(TweetItem.class, "is_public = ?", String.valueOf(isPublic()));
-        return TweetItem.find(TweetItem.class, "is_public = ?", String.valueOf(isPublic()));
+//        List<TweetItem> t1 = TweetItem.listAll(TweetItem.class, "id");
+//        List<TweetItem> t2 = TweetItem.find(TweetItem.class, "is_public = ?", String.valueOf(isPublic()));
+//        List<TweetItem> t3 = TweetItem.find(TweetItem.class, "is_public = ?", "0");
+//        List<TweetItem> t4 = TweetItem.find(TweetItem.class, "is_public = ?", "1");
+//        List<TweetItem> t4 = TweetItem.find(TweetItem.class, "is_public = ?", "1");
+//        List<TweetItem> t5 = Select.from(TweetItem.class).whereOr(Condition.prop("is_public").eq(String.valueOf(isPublic()))).list();
+        return TweetItem.find(TweetItem.class, "is_public = ?", isPublic() ? "1" : "0");
+    }
+
+    protected void deleteOldTweets(){
+        List<TweetItem> oldTweets = getFetchedOfflineTimeline();
+        for(TweetItem t : oldTweets){
+            t.delete();
+        }
     }
 
     protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG, int maxMyTweets) {

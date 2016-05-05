@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
@@ -18,22 +19,25 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        final ConnectivityManager connectivityManager = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        final ConnectivityManager connectivityManager =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        final android.net.NetworkInfo wifi = connectivityManager
-                .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        final NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        boolean isWiFi;
+        boolean isMobile;
 
-        final android.net.NetworkInfo mobile = connectivityManager
-                .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if(activeNetwork == null) {
+            isWiFi = false;
+            isMobile = false;
+        } else {
+            isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+            isMobile = activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
+        }
 
-        boolean isWifiAvailable = wifi.isAvailable();
-        boolean isMobileAvailable = mobile.isAvailable();
+        Log.d(TAG, "Wifi state - " + (isWiFi ? "AVAILABLE" : "UNAVAILABLE"));
+        Log.d(TAG, "Mobile state - " + (isMobile ? "AVAILABLE" : "UNAVAILABLE"));
 
-        Log.d(TAG, "Wifi state - " + (isWifiAvailable ? "AVAILABLE" : "UNAVAILABLE"));
-        Log.d(TAG, "Mobile state - " + (isMobileAvailable ? "AVAILABLE" : "UNAVAILABLE"));
-
-        if (isWifiAvailable || isMobileAvailable) {
+        if (isWiFi || isMobile) {
             // Do something
         }
 
