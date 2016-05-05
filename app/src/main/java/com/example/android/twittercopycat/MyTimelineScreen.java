@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class MyTimelineScreen extends AppCompatActivity {
     private Button sendTweet;
     private EditText tweetText;
     private TextView numberOfCharacters;
+    private ImageView shareBtn;
     private int tweetMaxCharacters;
     private TwitterCopyCatApplication app;
     private static final String TAG = "MyTimelineScreen";
@@ -122,13 +124,7 @@ public class MyTimelineScreen extends AppCompatActivity {
             public void onClick(View view) {
                 String tweet = tweetText.getText().toString();
 
-                if(tweet.length() < 1 || tweet.length() > 140) {
-                    Context context = getApplicationContext();
-                    CharSequence text = getString(R.string.invalid_number_of_characters);
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                } else {
+                if(checkValidTweet(tweet)) {
                     if(app.isNetworkAvailable()){
                         SendTweetTask tweetTask = new SendTweetTask(getApplicationContext());
                         tweetTask.execute(tweet);
@@ -161,12 +157,41 @@ public class MyTimelineScreen extends AppCompatActivity {
                 numberOfCharacters.setText(String.valueOf(tweetMaxCharacters - s.length()));
             }
         });
+
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String tweet = tweetText.getText().toString();
+
+                if(checkValidTweet(tweet)) {
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, tweet);
+                    sendIntent.setType("text/plain");
+                    startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.share_to)));
+                }
+            }
+        });
+    }
+
+    private boolean checkValidTweet(String tweet){
+        if(tweet.length() < 1 || tweet.length() > 140) {
+            Context context = getApplicationContext();
+            CharSequence text = getString(R.string.invalid_number_of_characters);
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return false;
+        }
+        return true;
     }
 
     private void findViews(){
         sendTweet = (Button) findViewById(R.id.button_send_tweet);
         tweetText = (EditText) findViewById(R.id.editText_tweet);
         numberOfCharacters = (TextView) findViewById(R.id.tweet_number_of_characters);
+        shareBtn = (ImageView) findViewById(R.id.share_tweet);
     }
 
     public class SendTweetTask extends AsyncTask<String, Void, Boolean> {
