@@ -85,9 +85,19 @@ public class MyTimelineScreen extends AppCompatActivity {
     // Menu Action Methods
     private void menuRefresh(){
         MyTimelineFragment frag = (MyTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.container);
-        frag.updateTweets(!app.isNetworkAvailable());
+        if(app.isNetworkAvailable()){
+            frag.updateTweets(!app.isNetworkAvailable());
+        } else {
+            Toast.makeText(
+                    getApplicationContext(),
+                    "You cannot refresh you tweets, because you're not connected to the internet.",
+                    Toast.LENGTH_LONG
+            ).show();
+        }
     }
+
     private void menuSettings(){}
+
     private void menuSignOut(){
 
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
