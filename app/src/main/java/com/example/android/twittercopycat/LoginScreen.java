@@ -79,12 +79,12 @@ public class LoginScreen extends AppCompatActivity implements LoaderCallbacks<Cu
         super.onCreate(savedInstanceState);
 
         TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
-
-        Intent i;
-        if(app.isLogged()){
-            i = new Intent(this, MyTimelineScreen.class);
-            startActivity(i);
-        }
+//
+//        Intent i;
+//        if(app.isLogged()){
+//            i = new Intent(this, MyTimelineScreen.class);
+//            startActivity(i);
+//        }
         setContentView(R.layout.activity_login);
 
         // finds all views
