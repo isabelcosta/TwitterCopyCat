@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import winterwell.jtwitter.Twitter;
 
@@ -27,49 +29,44 @@ import winterwell.jtwitter.Twitter;
  * create an instance of this fragment.
  */
 public class PublicTimelineFragment extends TimelineFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-//
-//    private OnFragmentInteractionListener mListener;
-//
-//    private ListView mListView;
-//    private ListScreenAdapter mListAdapter;
+    private static int DELAY = 15000;
+    private static int PERIODICAL_TIME = 15000;
     private int maxCharacters = 20;
 
     private boolean isPublic = false;
 
+    private Timer timer;
+
     public PublicTimelineFragment() {
         // Required empty public constructor
     }
-//
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment PublicTimelineFragment.
-//     */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set to update list periodically if internet is available
+        //// TODO: 05-05-2016 transform this into a function!!!  
+        
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //CALL YOUR ASSYNC TASK HERE.
+                if(app.isNetworkAvailable()) {
+                    updateTweets(false);
+                }
+            }
+        };
+
+        Timer timer = new Timer();
+
+        //DELAY: the time to the first execution
+        //PERIODICAL_TIME: the time between each execution of your task.
+        timer.schedule(timerTask, DELAY, PERIODICAL_TIME);
+
     }
-    // TODO: Rename and change types and number of parameters
-//    public static PublicTimelineFragment newInstance(String param1, String param2) {
-//        PublicTimelineFragment fragment = new PublicTimelineFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
