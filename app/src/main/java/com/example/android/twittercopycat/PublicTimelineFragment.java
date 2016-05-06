@@ -52,7 +52,7 @@ public class PublicTimelineFragment extends TimelineFragment {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                //CALL YOUR ASSYNC TASK HERE.
+                //CALL YOUR ASYNC TASK HERE.
                 if(app.isNetworkAvailable()) {
                     updateTweets(false);
                 }

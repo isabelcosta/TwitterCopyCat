@@ -96,7 +96,10 @@ public class MyTimelineScreen extends AppCompatActivity {
         }
     }
 
-    private void menuSettings(){}
+    private void menuSettings(){
+        Intent intent = new Intent(getApplicationContext(), SettingsScreen.class);
+        startActivity(intent);
+    }
 
     private void menuSignOut(){
 

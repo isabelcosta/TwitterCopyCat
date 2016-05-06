@@ -23,13 +23,10 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
                 (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         final NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-        boolean isWiFi;
-        boolean isMobile;
+        boolean isWiFi = false;
+        boolean isMobile = false;
 
-        if(activeNetwork == null) {
-            isWiFi = false;
-            isMobile = false;
-        } else {
+        if(activeNetwork != null) {
             isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
             isMobile = activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
         }

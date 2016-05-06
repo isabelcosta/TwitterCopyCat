@@ -342,6 +342,7 @@ public class TimelineFragment extends Fragment {
     }
 
     protected List<TweetItem> getFetchedOfflineTimeline() {
+//        For SugarDB testing purposes
 //        List<TweetItem> t1 = TweetItem.listAll(TweetItem.class, "id");
 //        List<TweetItem> t2 = TweetItem.find(TweetItem.class, "is_public = ?", String.valueOf(isPublic()));
 //        List<TweetItem> t3 = TweetItem.find(TweetItem.class, "is_public = ?", "0");
@@ -360,5 +361,26 @@ public class TimelineFragment extends Fragment {
 
     protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG, int maxMyTweets) {
         return null;
+    }
+
+    protected long getTimeInMiliSeconds(Long hours, Long minutes, Long seconds) {
+        long miliSeconds = 1000;
+        long hoursInMiliSec = 0;
+        long minutesInMiliSec = 0;
+        long secondsInMiliSec = 0;
+
+        if (hours != null) {
+            hoursInMiliSec = hours * 60 * 60 * miliSeconds;
+        }
+
+        if (minutes != null) {
+            minutesInMiliSec = minutes * 60 * miliSeconds;
+        }
+
+        if (seconds != null) {
+            secondsInMiliSec = seconds * miliSeconds;
+        }
+
+        return hoursInMiliSec + minutesInMiliSec + secondsInMiliSec;
     }
 }

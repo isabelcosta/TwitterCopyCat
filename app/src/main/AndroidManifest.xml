@@ -59,11 +59,19 @@
             android:name=".NetworkChangeBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".SettingsScreen"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MyTimelineScreen">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.twittercopycat.MyTimelineScreen" />
+        </activity>
     </application>
 
 </manifest>
