@@ -46,6 +46,11 @@ public class MyTimelineScreen extends AppCompatActivity {
         setContentView(R.layout.activity_my_timeline);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        // Broadcast Receiver....
+//        NetworkChangeBroadcastReceiver networkReceiver = new NetworkChangeBroadcastReceiver();
+//        registerReceiver(networkReceiver, );
+
+
         //find views and adding listeners
         findViews();
         addViewListeners();
@@ -210,9 +215,7 @@ public class MyTimelineScreen extends AppCompatActivity {
     public class SendTweetTask extends AsyncTask<String, Void, Boolean> {
 
         private final String LOG_TAG = SendTweetTask.class.getSimpleName();
-        // TODO: 04-05-2016 define api_url on strings.xml
         private final String apiUrl = getString(R.string.api_url);
-
         private final Context mContext;
 
         public SendTweetTask(Context context) {
@@ -225,15 +228,18 @@ public class MyTimelineScreen extends AppCompatActivity {
         protected Boolean doInBackground(String... tweet) {
 
             try{
-                //@TODO set username and password on application when login
+//                TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
+
                 Twitter t = new Twitter(app.getUsername(), app.getPassword());
                 t.setAPIRootUrl(apiUrl);
                 t.updateStatus(tweet[0]);
-                Log.d(LOG_TAG, "Sending this tweet: " + tweet[0]);
+                Log.d(LOG_TAG, "Sending this tweet: " + tweet);
+
             } catch (TwitterException e){
                 return false;
             }
             return true;
+//            return TwitterHelper.sendOfflineTweets(apiUrl, LOG_TAG);
         }
 
         @Override
@@ -244,7 +250,7 @@ public class MyTimelineScreen extends AppCompatActivity {
                 Toast.makeText(mContext, "Your Tweet was sent!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(mContext, "Your Tweet couldn't be sent now. We'll send it later ;) ", Toast.LENGTH_LONG).show();
-                //app.addOfflineTweet(tweet);
+//                app.addOfflineTweet(tweet);
             }
 
             //clear the text box

@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.orm.SugarApp;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by IsabelCosta on 20-04-2016.
@@ -22,6 +23,7 @@ public class TwitterCopyCatApplication extends SugarApp {
     private static final String PASSWORD = "password";
     private static final String USERNAME = "student";
 
+    private String _apiUrl;
     private SharedPreferences _sharedPrefs;
     private String _username;
     private String _password;
@@ -45,6 +47,8 @@ public class TwitterCopyCatApplication extends SugarApp {
             _username = _sharedPrefs.getString(USERNAME, null);
             _password = _sharedPrefs.getString(PASSWORD, null);
         }
+
+        _apiUrl = getResources().getString(R.string.api_url);
 
         //Image Loader
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
@@ -97,6 +101,10 @@ public class TwitterCopyCatApplication extends SugarApp {
 
     public void setCredentialsFromSharedPrefs(){}
 
+    public String getApiUrl(){
+        return _apiUrl;
+    }
+
     // Check for Network Connection
 
     public boolean isNetworkAvailable() {
@@ -110,6 +118,14 @@ public class TwitterCopyCatApplication extends SugarApp {
 
     public void addOfflineTweet(String offTweet){
         offlineTweets.add(offTweet);
+    }
+
+    public List<String> getOfflineTweets() {
+        return offlineTweets;
+    }
+
+    public String removeSentOfflineTweet() {
+        return offlineTweets.removeFirst();
     }
 
 }

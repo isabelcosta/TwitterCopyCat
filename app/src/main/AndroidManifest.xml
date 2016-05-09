@@ -72,6 +72,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.twittercopycat.MyTimelineScreen" />
         </activity>
+
+        <service
+            android:name=".MySendOfflineService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

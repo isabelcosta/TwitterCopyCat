@@ -35,7 +35,9 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
         Log.d(TAG, "Mobile state - " + (isMobile ? "AVAILABLE" : "UNAVAILABLE"));
 
         if (isWiFi || isMobile) {
-            // Do something
+            // Start sending offline tweets
+            Intent sendOfflineTweetsIntent = new Intent(context, MySendOfflineService.class);
+            context.startService(sendOfflineTweetsIntent);
         }
 
 //        // TODO: This method is called when the BroadcastReceiver is receiving
