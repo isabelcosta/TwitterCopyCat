@@ -147,9 +147,14 @@
 
     <!--Error messages-->
 
-    <string name="invalid_number_of_characters">Invalid number of characters</string>
+    <string name="invalid_number_of_characters">Número de caracteres inválidos</string>
+    <string name="unable_to_send_tweet">O seu tweet não pode ser enviado agora. Será enviado mais tarde.</string>
+
+    <!--Alert messages-->
+
+    <string name="offline_tweets_sent">Os seus tweets enviados offline acabaram de ser enviados!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="welcome_to_my_timeline">Bem vindo a minha Timeline</string>
+    <string name="welcome_to_my_timeline">Bem-vindo a minha Timeline</string>
     <string name="tweet">Tweet</string>
 </resources>

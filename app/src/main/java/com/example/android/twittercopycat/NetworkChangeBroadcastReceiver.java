@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.Toast;
 
 public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
 
@@ -31,14 +32,25 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
             isMobile = activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
         }
 
-        Log.d(TAG, "Wifi state - " + (isWiFi ? "AVAILABLE" : "UNAVAILABLE"));
-        Log.d(TAG, "Mobile state - " + (isMobile ? "AVAILABLE" : "UNAVAILABLE"));
+        Log.d(TAG, "Wifi state - " + (isWiFi ? Constants.AVAILABLE : Constants.UNAVAILABLE));
+        Log.d(TAG, "Mobile state - " + (isMobile ? Constants.AVAILABLE : Constants.UNAVAILABLE));
+
+        String mode;
 
         if (isWiFi || isMobile) {
+            mode = Constants.ONLINE_MODE;
             // Start sending offline tweets
             Intent sendOfflineTweetsIntent = new Intent(context, MySendOfflineService.class);
             context.startService(sendOfflineTweetsIntent);
+        } else {
+            mode = Constants.OFFLINE_MODE;
         }
+
+        Toast.makeText(
+                context,
+                mode,
+                Toast.LENGTH_SHORT
+        ).show();
 
 //        // TODO: This method is called when the BroadcastReceiver is receiving
 //        // an Intent broadcast.

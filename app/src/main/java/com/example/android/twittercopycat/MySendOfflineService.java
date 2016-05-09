@@ -3,6 +3,7 @@ package com.example.android.twittercopycat;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +18,7 @@ import winterwell.jtwitter.Twitter;
  * helper methods.
  */
 public class MySendOfflineService extends IntentService {
-    private static final String LOG_TAG = MySendOfflineService.class.getName();
+    private static final String LOG_TAG = "MySendOfflineService";
 
     public MySendOfflineService() {
         super("MySendOfflineService");
@@ -28,7 +29,7 @@ public class MySendOfflineService extends IntentService {
         if (intent != null) {
 
             TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
-            List<String> tweetsCopy = new LinkedList<String>(app.getOfflineTweets());
+            List<String> tweetsCopy = new LinkedList<>(app.getOfflineTweets());
 
             Twitter t = new Twitter(app.getUsername(), app.getPassword());
             t.setAPIRootUrl(app.getApiUrl());
@@ -38,6 +39,12 @@ public class MySendOfflineService extends IntentService {
                 Log.d(LOG_TAG, "Sending this tweet: " + tweet);
                 Log.d(LOG_TAG, "Removing this tweet: " + app.removeSentOfflineTweet());
             }
+
+            Toast.makeText(
+                    getApplicationContext(),
+                    getString(R.string.offline_tweets_sent),
+                    Toast.LENGTH_LONG
+            ).show();
         }
     }
 }

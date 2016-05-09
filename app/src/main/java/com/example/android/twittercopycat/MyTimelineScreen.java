@@ -135,8 +135,6 @@ public class MyTimelineScreen extends AppCompatActivity {
 
     private void addViewListeners(){
 
-        // TODO: 04-05-2016 add listener to share icon!!! and change its color 
-
         sendTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,10 +147,15 @@ public class MyTimelineScreen extends AppCompatActivity {
                     } else {
                         Toast.makeText(
                                 getApplicationContext(),
-                                "Your Tweet couldn't be sent now. We'll send it later ;)",
+                                getString(R.string.unable_to_send_tweet),
                                 Toast.LENGTH_LONG
                         ).show();
+
+                        // Save the offline tweet to send it later
                         app.addOfflineTweet(tweet);
+
+                        // Clear the text box
+                        tweetText.setText("");
                     }
                 }
             }
@@ -228,7 +231,6 @@ public class MyTimelineScreen extends AppCompatActivity {
         protected Boolean doInBackground(String... tweet) {
 
             try{
-//                TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
 
                 Twitter t = new Twitter(app.getUsername(), app.getPassword());
                 t.setAPIRootUrl(apiUrl);
@@ -239,7 +241,6 @@ public class MyTimelineScreen extends AppCompatActivity {
                 return false;
             }
             return true;
-//            return TwitterHelper.sendOfflineTweets(apiUrl, LOG_TAG);
         }
 
         @Override
@@ -250,7 +251,6 @@ public class MyTimelineScreen extends AppCompatActivity {
                 Toast.makeText(mContext, "Your Tweet was sent!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(mContext, "Your Tweet couldn't be sent now. We'll send it later ;) ", Toast.LENGTH_LONG).show();
-//                app.addOfflineTweet(tweet);
             }
 
             //clear the text box
