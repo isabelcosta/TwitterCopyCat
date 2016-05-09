@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import winterwell.jtwitter.Twitter;
 
@@ -33,12 +35,12 @@ import winterwell.jtwitter.Twitter;
  * create an instance of this fragment.
  */
 public class TimelineFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    protected static final String USERNAME = "username";
-    protected static final String PASSWORD = "password";
 
-    // TODO: Rename and change types of parameters
+    protected static final String USERNAME = Constants.USERNAME;
+    protected static final String PASSWORD = Constants.PASSWORD;
+    private static int DELAY = 15000;
+    private static int PERIODICAL_TIME = 15000;
+
     protected String username;
     protected String password;
 
@@ -48,7 +50,7 @@ public class TimelineFragment extends Fragment {
     protected ListScreenAdapter mListAdapter;
     protected List<TweetItem> timeline;
     protected int maxCharacters = 20;
-    protected static String API_URL = "http://yamba.newcircle.com/api";
+    protected static String API_URL = Constants.API_URL;
     protected TwitterCopyCatApplication app;
 
 
@@ -86,6 +88,38 @@ public class TimelineFragment extends Fragment {
         }
 
         timeline = new ArrayList<TweetItem>();
+        scheduleUpdates();
+    }
+
+    protected void scheduleUpdates(){
+        // Set to update list periodically if internet is available
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                //CALL YOUR ASYNC TASK HERE.
+                if(app.isNetworkAvailable()) {
+                    updateTweets(false);
+                }
+            }
+        };
+
+        Timer timer = new Timer();
+
+        //DELAY: the time to the first execution
+        //PERIODICAL_TIME: the time between each execution of your task.
+        timer.schedule(
+                timerTask,
+                DELAY,
+                getUpdatePeriod()
+        );
+    }
+
+    protected long getUpdatePeriod(){
+        if(isPublic()){
+            return  getTimeInMiliSeconds(Long.valueOf(0), Long.valueOf(0), Long.valueOf(15));
+        } else {
+            return  getTimeInMiliSeconds(Long.valueOf(0), Long.valueOf(0), Long.valueOf(10));
+        }
     }
 
     @Override
@@ -359,6 +393,7 @@ public class TimelineFragment extends Fragment {
         }
     }
 
+    //defined in child classes
     protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG, int maxMyTweets) {
         return null;
     }

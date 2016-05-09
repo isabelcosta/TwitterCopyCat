@@ -15,7 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import winterwell.jtwitter.Twitter;
 
@@ -30,11 +29,8 @@ import winterwell.jtwitter.Twitter;
  */
 public class PublicTimelineFragment extends TimelineFragment {
 
-    private static int DELAY = 15000;
-    private static int PERIODICAL_TIME = 15000;
     private int maxCharacters = 20;
-
-    private boolean isPublic = false;
+    private int maxPublicTweets = 10;
 
     private Timer timer;
 
@@ -45,26 +41,6 @@ public class PublicTimelineFragment extends TimelineFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Set to update list periodically if internet is available
-        //// TODO: 05-05-2016 transform this into a function!!!  
-        
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                //CALL YOUR ASYNC TASK HERE.
-                if(app.isNetworkAvailable()) {
-                    updateTweets(false);
-                }
-            }
-        };
-
-        Timer timer = new Timer();
-
-        //DELAY: the time to the first execution
-        //PERIODICAL_TIME: the time between each execution of your task.
-        timer.schedule(timerTask, DELAY, PERIODICAL_TIME);
-
     }
 
     @Override
@@ -164,9 +140,11 @@ public class PublicTimelineFragment extends TimelineFragment {
     @Override
     protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG, int maxTweets) {
 
+        // TODO: 09-05-2016 what to do with maxTweets that isn't used 
+        
         Twitter t = new Twitter();
         t.setAPIRootUrl(API_URL);
-        t.setCount(maxTweets);
+        t.setCount(maxPublicTweets);
         return t.getPublicTimeline();
     }
 

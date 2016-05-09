@@ -20,8 +20,6 @@ public class TwitterCopyCatApplication extends SugarApp {
 
     public static final String SHARED_PREFS_FILENAME = "TwitterCopyCatSharedPrefs";
     public static final String SAVE_CREDENTIALS = "isLogged";
-    private static final String PASSWORD = "password";
-    private static final String USERNAME = "student";
 
     private String _apiUrl;
     private SharedPreferences _sharedPrefs;
@@ -44,8 +42,8 @@ public class TwitterCopyCatApplication extends SugarApp {
         // Get credentials in case the user saved credentials
         _sharedPrefs = getSharedPreferences(SHARED_PREFS_FILENAME, Context.MODE_PRIVATE);
         if(isLogged()){
-            _username = _sharedPrefs.getString(USERNAME, null);
-            _password = _sharedPrefs.getString(PASSWORD, null);
+            _username = _sharedPrefs.getString(Constants.USERNAME, null);
+            _password = _sharedPrefs.getString(Constants.PASSWORD, null);
         }
 
         _apiUrl = getResources().getString(R.string.api_url);
@@ -73,8 +71,8 @@ public class TwitterCopyCatApplication extends SugarApp {
         setUsername(username);
         setPassword(password);
         if(toSave){
-            editor.putString(USERNAME, username);
-            editor.putString(PASSWORD, password);
+            editor.putString(Constants.USERNAME, username);
+            editor.putString(Constants.PASSWORD, password);
         }
         editor.apply();
     }
@@ -98,8 +96,6 @@ public class TwitterCopyCatApplication extends SugarApp {
     public void setPassword(String password){
         this._password = password;
     }
-
-    public void setCredentialsFromSharedPrefs(){}
 
     public String getApiUrl(){
         return _apiUrl;
