@@ -65,7 +65,7 @@
         </receiver>
 
         <activity
-            android:name=".SettingsScreen"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MyTimelineScreen">
             <meta-data
