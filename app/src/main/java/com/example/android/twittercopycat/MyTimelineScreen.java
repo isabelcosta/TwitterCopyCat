@@ -103,7 +103,7 @@ public class MyTimelineScreen extends AppCompatActivity {
 
     private void menuSettings(){
 //        Intent intent = new Intent(getApplicationContext(), SettingsScreen.class);
-        Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), SettingsScreen.class);
         startActivity(intent);
     }
 

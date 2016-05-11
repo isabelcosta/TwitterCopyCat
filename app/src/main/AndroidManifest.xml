@@ -40,6 +40,14 @@
         <activity
             android:name=".PublicTimelineScreen"
             android:label="@string/title_activity_timeline" />
+        <activity
+            android:name=".SettingsScreen"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MyTimelineScreen">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.twittercopycat.MyTimelineScreen" />
+        </activity>
 
         <!-- Sugar Related Attributes -->
         <meta-data
@@ -55,6 +63,8 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.example" />
 
+        <!--Broadcast Receiver-->
+
         <receiver
             android:name=".NetworkChangeBroadcastReceiver"
             android:enabled="true"
@@ -64,14 +74,7 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".MyTimelineScreen">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.twittercopycat.MyTimelineScreen" />
-        </activity>
+        <!--Services-->
 
         <service
             android:name=".MySendOfflineService"
