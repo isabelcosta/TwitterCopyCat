@@ -12,5 +12,8 @@ public final class Constants {
     public static String ONLINE_MODE = "ONLINE MODE";
     public static String USERNAME = "username";
     public static String PASSWORD = "password";
+    public static String NUMBER_OF_TWEETS_PREF = "prefNumberOfTweets";
+    public static String WIFI_ONLY_PREF = "prefWifiOnlySwitch";
+    public static String SYNC_FREQUENCY_PREF = "prefSyncFrequency";
     public static String API_URL = "http://yamba.newcircle.com/api";
 }
