@@ -325,7 +325,6 @@ public class TimelineFragment extends Fragment {
             }
 
             //delete old tweets from database
-            //TweetItem.deleteAll(TweetItem.class);
             deleteOldTweets();
 
             List<TweetItem> TweetItems = new LinkedList<>();

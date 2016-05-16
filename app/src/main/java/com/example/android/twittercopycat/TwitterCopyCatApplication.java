@@ -110,7 +110,17 @@ public class TwitterCopyCatApplication extends SugarApp {
         long scTime = 15000;// 15 seconds
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + scTime, pendingIntent);
+//        alarmManager.set(
+//                AlarmManager.RTC_WAKEUP,
+//                System.currentTimeMillis() + scTime,
+//                pendingIntent);
+
+        alarmManager.setInexactRepeating(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                scTime,
+                scTime,
+                pendingIntent
+        );
     }
 
     public boolean isLogged() {
