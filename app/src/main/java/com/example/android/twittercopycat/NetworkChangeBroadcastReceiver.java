@@ -37,11 +37,22 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
 
         String mode;
 
+        // TODO: 16-05-2016 Possibly improve this if condition
+        if (TwitterCopyCatApplication.getInstance().getWifiOnlyPref()){
+            if (isWiFi) { // Send offline tweet only through wifi
+                // Start sending offline tweets
+                Intent sendOfflineTweetsIntent = new Intent(context, MySendOfflineService.class);
+                context.startService(sendOfflineTweetsIntent);
+            }
+        } else { // Send offline tweet through any "type of connection"
+            if (isWiFi || isMobile) {
+                // Start sending offline tweets
+                Intent sendOfflineTweetsIntent = new Intent(context, MySendOfflineService.class);
+                context.startService(sendOfflineTweetsIntent);
+            }
+        }
         if (isWiFi || isMobile) {
             mode = Constants.ONLINE_MODE;
-            // Start sending offline tweets
-            Intent sendOfflineTweetsIntent = new Intent(context, MySendOfflineService.class);
-            context.startService(sendOfflineTweetsIntent);
         } else {
             mode = Constants.OFFLINE_MODE;
         }
@@ -51,9 +62,5 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
                 mode,
                 Toast.LENGTH_SHORT
         ).show();
-
-//        // TODO: This method is called when the BroadcastReceiver is receiving
-//        // an Intent broadcast.
-//        throw new UnsupportedOperationException("Not yet implemented");
     }
 }
