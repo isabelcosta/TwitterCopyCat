@@ -36,7 +36,7 @@ public class TwitterHelper {
         return true;
     }
 
-    public void showNotification(String tweet, Context ctx) {
+    public static void showNotification(String tweet, Context ctx) {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(ctx)

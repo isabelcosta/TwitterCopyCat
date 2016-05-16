@@ -143,6 +143,7 @@ public class MyTimelineScreen extends AppCompatActivity {
 
                 if(checkValidTweet(tweet)) {
                     if(app.isNetworkAvailable()){
+                        TwitterHelper.showNotification(tweet, getApplicationContext());
                         SendTweetTask tweetTask = new SendTweetTask(getApplicationContext());
                         tweetTask.execute(tweet);
                     } else {

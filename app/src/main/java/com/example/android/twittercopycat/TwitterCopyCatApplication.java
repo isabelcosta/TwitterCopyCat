@@ -1,6 +1,9 @@
 package com.example.android.twittercopycat;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -56,9 +59,13 @@ public class TwitterCopyCatApplication extends SugarApp {
 
         _apiUrl = getResources().getString(R.string.api_url);
 
+        // Load onto the application the settings preferences
         loadSettingsPreferences();
 
-        //Image Loader
+        // Alarm to notify about new tweets
+        setMyAlarmCheckForNewTweets();
+
+        // Image Loader
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .build();
 
@@ -95,6 +102,15 @@ public class TwitterCopyCatApplication extends SugarApp {
         _numberOfTweetsPref = _sharedPrefs.getInt(Constants.NUMBER_OF_TWEETS_PREF, 5);
         _wifiOnlyPref = _sharedPrefs.getBoolean(Constants.WIFI_ONLY_PREF, false);
         _syncFrequencyPref = _sharedPrefs.getInt(Constants.SYNC_FREQUENCY_PREF, 15);
+    }
+
+    public void setMyAlarmCheckForNewTweets(){
+        Intent alarmIntent = new Intent(this, MyAlarmReceiver.class);
+//        long scTime = 60* 10000;// 10 minutes
+        long scTime = 15000;// 15 seconds
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + scTime, pendingIntent);
     }
 
     public boolean isLogged() {

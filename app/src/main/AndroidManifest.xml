@@ -63,7 +63,7 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="com.example" />
 
-        <!--Broadcast Receiver-->
+        <!-- Broadcast Receiver -->
 
         <receiver
             android:name=".NetworkChangeBroadcastReceiver"
@@ -74,10 +74,19 @@
             </intent-filter>
         </receiver>
 
-        <!--Services-->
+        <!-- Services -->
 
         <service
             android:name=".MySendOfflineService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".MyAlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".NewTweetService"
             android:exported="false"></service>
     </application>
 
