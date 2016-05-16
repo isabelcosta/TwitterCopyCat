@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import winterwell.jtwitter.Twitter;
  */
 public class TimelineFragment extends Fragment {
 
+    protected static final String LOG_TAG = "TimelineFragment";
     protected static final String USERNAME = Constants.USERNAME;
     protected static final String PASSWORD = Constants.PASSWORD;
     private static int DELAY = 15000;
@@ -53,6 +55,23 @@ public class TimelineFragment extends Fragment {
     protected static String API_URL = Constants.API_URL;
     protected TwitterCopyCatApplication app;
 
+    private Handler handler = new Handler();
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            long time = getUpdatePeriod();
+            // FIXME: 16-05-2016 this is awfully done needs to stop the handler when the user
+            // chooses to update its timeline manually
+            Log.d(LOG_TAG, String.valueOf(time));
+            if(time != -1){
+                if(app.isNetworkAvailable()) {
+                    updateTweets(false);
+                }
+            }
+            handler.postDelayed(this, getUpdatePeriod());
+        }
+    };
 
     public TimelineFragment() {
         // Required empty public constructor
@@ -88,10 +107,14 @@ public class TimelineFragment extends Fragment {
         }
 
         timeline = new ArrayList<TweetItem>();
-        scheduleUpdates();
+
+        handler.postDelayed(runnable, 100);
+
+//        scheduleUpdates();
     }
 
     protected void scheduleUpdates(){
+        // WITH TIMER TASK
         // Set to update list periodically if internet is available
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -110,15 +133,23 @@ public class TimelineFragment extends Fragment {
         timer.schedule(
                 timerTask,
                 DELAY,
-                getUpdatePeriod()
+                getUpdatePeriod() //PERIODICAL_TIME
         );
+
+        // WITH HANDLER
+
+
     }
 
     protected long getUpdatePeriod(){
         if(isPublic()){
             return  getTimeInMiliSeconds(Long.valueOf(0), Long.valueOf(0), Long.valueOf(15));
         } else {
-            return  getTimeInMiliSeconds(Long.valueOf(0), Long.valueOf(0), Long.valueOf(10));
+            long interval = app.getSyncFrequencyPref();
+            if(interval != -1){
+                return getTimeInMiliSeconds(Long.valueOf(0), Long.valueOf(0), Long.valueOf(app.getSyncFrequencyPref()));
+            }
+            return -1;
         }
     }
 
@@ -205,6 +236,10 @@ public class TimelineFragment extends Fragment {
     }
 
     protected void updateTweets(boolean offline) {
+        Log.d(LOG_TAG, "TIMINGGGG    ?    " + String.valueOf(getUpdatePeriod()));
+        Log.d(LOG_TAG, "NUMBERTWEETS ?    " + String.valueOf(app.getNumberOfTweetsPref()));
+        Log.d(LOG_TAG, "WIFI ONLY    ?    " + String.valueOf(app.getWifiOnlyPref()));
+
         if(offline){
             FetchPublicOfflineTweetTask tweetTask = new FetchPublicOfflineTweetTask(getActivity(), timeline);
             tweetTask.execute();
