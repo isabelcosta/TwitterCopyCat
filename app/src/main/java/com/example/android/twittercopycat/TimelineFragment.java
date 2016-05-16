@@ -264,7 +264,7 @@ public class TimelineFragment extends Fragment {
     public class FetchPublicOnlineTweetTask extends AsyncTask<Bundle, Void, List<TweetItem>> {
 
         private final String LOG_TAG = FetchPublicOnlineTweetTask.class.getSimpleName();
-        private final int maxPubTweets = 5;
+        private final int maxPubTweets = 10;
 
         private final Context mContext;
         private List<TweetItem> timeline;
@@ -282,7 +282,7 @@ public class TimelineFragment extends Fragment {
             List<Twitter.Status> fetchedTimeline = getFetchedOnlineTimeline(
                     params.length == 0 ? null : params[0],
                     LOG_TAG,
-                    maxPubTweets
+                    isPublic() ? maxPubTweets : app.getNumberOfTweetsPref()
             );
 
             if(fetchedTimeline == null){

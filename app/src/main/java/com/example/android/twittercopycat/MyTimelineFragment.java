@@ -145,6 +145,7 @@ public class MyTimelineFragment extends TimelineFragment {
 
         Log.d(LOG_TAG, "USERNAME: " + username);
         Log.d(LOG_TAG, "PASSWORD: " + password);
+        Log.d(LOG_TAG, "NUMBER OF TWEETS: " + String.valueOf(maxMyTweets));
 
         t.setAPIRootUrl(API_URL);
         t.setCount(maxMyTweets);

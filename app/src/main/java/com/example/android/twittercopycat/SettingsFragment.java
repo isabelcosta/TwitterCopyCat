@@ -53,8 +53,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        updatePreferenceOnSummary(findPreference(key), key);
         updatePreferenceOnApplication(findPreference(key), key);
+        updatePreferenceOnSummary(findPreference(key), key);
     }
 
     private void updatePreferenceOnSummary(Preference preference, String key) {
@@ -83,21 +83,29 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private void updatePreferenceOnApplication(Preference preference, String key) {
         TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
         SharedPreferences sharedPrefs = app.getAppSharedPreferences();
+        SharedPreferences defaultSharedPrefs = getPreferenceScreen().getSharedPreferences();
+        SharedPreferences.Editor editor = sharedPrefs.edit();
 
         if (preference == null) return;
 
         if (preference.getKey().equals(Constants.NUMBER_OF_TWEETS_PREF)) {
             // Number of tweets NumberPickerPreference
-            app.setNumberOfTweetsPref(sharedPrefs.getInt(key, 5));
+            app.setNumberOfTweetsPref(defaultSharedPrefs.getInt(key, 5));
+            editor.putInt(key,defaultSharedPrefs.getInt(key, 5));
 
         } else if (preference.getKey().equals(Constants.WIFI_ONLY_PREF)) {
             // Wifi Only SwitchPreference
-            app.setWifiOnlyPref(sharedPrefs.getBoolean(key, false));
+            app.setWifiOnlyPref(defaultSharedPrefs.getBoolean(key, false));
+            editor.putBoolean(key,defaultSharedPrefs.getBoolean(key, false));
 
         } else if (preference.getKey().equals(Constants.SYNC_FREQUENCY_PREF)) {
             // Sync Frequency ListPreference
             ListPreference listPreference = (ListPreference) preference;
             app.setSyncFrequencyPref(Integer.valueOf(listPreference.getValue()));
+            editor.putInt(key,Integer.valueOf(listPreference.getValue()));
+
         }
+
+        editor.apply();
     }
 }
