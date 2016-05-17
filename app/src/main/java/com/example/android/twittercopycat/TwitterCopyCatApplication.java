@@ -51,6 +51,8 @@ public class TwitterCopyCatApplication extends SugarApp {
         _sharedPrefs = getSharedPreferences(SHARED_PREFS_FILENAME, Context.MODE_PRIVATE);
 //        _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+        //setFirstTime();
+
         // Get credentials in case the user saved credentials
         if(isLogged()){
             _username = _sharedPrefs.getString(Constants.USERNAME, null);
@@ -96,6 +98,18 @@ public class TwitterCopyCatApplication extends SugarApp {
             editor.putString(Constants.PASSWORD, password);
         }
         editor.apply();
+    }
+
+    public void setFirstTime() {
+        if(_sharedPrefs.getBoolean(Constants.IS_FIRST_TIME, true)) {
+            SharedPreferences.Editor editor = _sharedPrefs.edit();
+            editor.putBoolean(Constants.IS_FIRST_TIME, false);
+            editor.apply();
+        }
+    }
+
+    public boolean isFirstTime(){
+        return !_sharedPrefs.contains(Constants.IS_FIRST_TIME);
     }
 
     public void loadSettingsPreferences(){

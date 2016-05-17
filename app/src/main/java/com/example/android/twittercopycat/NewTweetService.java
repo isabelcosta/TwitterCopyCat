@@ -42,29 +42,32 @@ public class NewTweetService extends IntentService {
 
         TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
 
-        Twitter t = new Twitter();
-        t.setAPIRootUrl(app.getApiUrl());
-        t.setCount(1);
-
-        // Get the last online tweet
-        List<Twitter.Status> onTweets = t.getPublicTimeline();
-        long lastOnlineTweetID = onTweets.get(0).getId();
-
-
-        // FIXME: 16-05-2016 Query the last tweet
-        
         // Get last tweet saved into database
         List<TweetItem> offTweets = TweetItem.find(TweetItem.class, "is_public = ?", "1");
-        long lastSavedTweetID = offTweets.get(0).getTweetId();
 
-        Log.d(LOG_TAG,"EIS OS IDs: " + String.valueOf(lastOnlineTweetID) + "    " + String.valueOf(lastSavedTweetID));
+        if(!offTweets.isEmpty()){
 
-        if(lastOnlineTweetID != lastSavedTweetID){
-            // Create Notification
-            createNewTweetNotification();
+            long lastSavedTweetID = offTweets.get(0).getTweetId();
+
+            Twitter t = new Twitter();
+            t.setAPIRootUrl(app.getApiUrl());
+            t.setCount(1);
+
+            // Get the last online tweet
+            List<Twitter.Status> onTweets = t.getPublicTimeline();
+            long lastOnlineTweetID = onTweets.get(0).getId();
+
+            // FIXME: 16-05-2016 Query the last tweet
+
+            Log.d(LOG_TAG,"EIS OS IDs: " + String.valueOf(lastOnlineTweetID) + "    " + String.valueOf(lastSavedTweetID));
+
+            if(lastOnlineTweetID != lastSavedTweetID){
+                // Create Notification
+                createNewTweetNotification();
+            }
+
+            Log.d(LOG_TAG,"PASSEI POR AQUI");
         }
-
-        Log.d(LOG_TAG,"PASSEI POR AQUI");
     }
 
     private void createNewTweetNotification() {
