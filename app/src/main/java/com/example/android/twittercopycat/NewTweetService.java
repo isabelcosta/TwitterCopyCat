@@ -43,10 +43,23 @@ public class NewTweetService extends IntentService {
         TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
 
         // Get last tweet saved into database
-        List<TweetItem> offTweets = TweetItem.find(TweetItem.class, "is_public = ?", "1");
-
+        String highestIdQuery =
+                "SELECT * " +
+                "FROM tweet_item " +
+                "WHERE is_public=1 " +
+                "AND tweet_id IN (" +
+                        "SELECT MAX(tweet_id) " +
+                        "FROM tweet_item)";
+        List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery);
+        
+        
+        
+        List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery);
+        // TODO: 18-05-2016 query builder see image with string format 
+        
+        
         if(!offTweets.isEmpty()){
-
+            Log.d(LOG_TAG, "Offline Tweets results da query are not empty");
             long lastSavedTweetID = offTweets.get(0).getTweetId();
 
             Twitter t = new Twitter();

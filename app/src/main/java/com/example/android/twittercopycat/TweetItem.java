@@ -6,20 +6,20 @@ import android.os.Parcelable;
 import com.orm.SugarRecord;
 
 public class TweetItem extends SugarRecord implements Parcelable {
-    private long id;
-    private String authorName;
-    private String authorPicture;
-    private String authorDescription;
-    private String date;
-    private String text;
-    private boolean isPublic;
+    private long tweetId;               //id
+    private String authorName;          //author_name
+    private String authorPicture;       //author_picture
+    private String authorDescription;   //author_description
+    private String date;                //date
+    private String text;                //text
+    private boolean isPublic;           //is_public
 
     public TweetItem(){
 
     }
 
     public TweetItem(long id, String author, String authorPicture, String authorDescription, String date, String text, boolean isPublic){
-        this.id = id;
+        this.tweetId = id;
         this.authorName = author;
         this.date = date;
         this.text = text;
@@ -29,7 +29,7 @@ public class TweetItem extends SugarRecord implements Parcelable {
     }
 
     public long getTweetId(){
-        return id;
+        return tweetId;
     }
     public String getTweetAuthorName () {
         return authorName;
@@ -51,9 +51,8 @@ public class TweetItem extends SugarRecord implements Parcelable {
     }
 
     protected TweetItem(Parcel in) {
-        id = in.readLong();
+        tweetId = in.readLong();
         authorName = in.readString();
-        //authorPicture = (URI) in.readValue(URI.class.getClassLoader());
         authorPicture = in.readString();
         authorDescription = in.readString();
         date = in.readString();
@@ -67,7 +66,7 @@ public class TweetItem extends SugarRecord implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
+        dest.writeLong(tweetId);
         dest.writeString(authorName);
         dest.writeString(authorPicture);
         dest.writeString(authorDescription);

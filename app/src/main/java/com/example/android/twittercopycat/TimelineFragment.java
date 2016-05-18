@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import winterwell.jtwitter.Twitter;
 
@@ -62,14 +60,25 @@ public class TimelineFragment extends Fragment {
         public void run() {
             long time = getUpdatePeriod();
             // FIXME: 16-05-2016 this is awfully done needs to stop the handler when the user
-            // chooses to update its timeline manually
-            Log.d(LOG_TAG, String.valueOf(time));
-            if(time != -1){
-                if(app.isNetworkAvailable()) {
-                    updateTweets(false);
+//
+//            if(isPublic()){
+//
+//            } else {}
+//
+
+
+            // chooses to update its timeline manually if time =-1
+
+            Log.d(LOG_TAG, "Sync time is " + String.valueOf(time));
+            Log.d(LOG_TAG, "Is Timeline onResume? " + String.valueOf(TwitterCopyCatApplication.isActivityVisible()));
+            if(TwitterCopyCatApplication.isActivityVisible()){
+                if(time != -1){
+                    if(app.isNetworkAvailable()) {
+                        updateTweets(false);
+                    }
+                    handler.postDelayed(this, time);
                 }
             }
-            handler.postDelayed(this, getUpdatePeriod());
         }
     };
 
@@ -77,6 +86,16 @@ public class TimelineFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        TwitterCopyCatApplication.activityResumed();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        TwitterCopyCatApplication.activityPaused();
+    }
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -109,36 +128,6 @@ public class TimelineFragment extends Fragment {
         timeline = new ArrayList<TweetItem>();
 
         handler.postDelayed(runnable, 100);
-
-//        scheduleUpdates();
-    }
-
-    protected void scheduleUpdates(){
-        // WITH TIMER TASK
-        // Set to update list periodically if internet is available
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                //CALL YOUR ASYNC TASK HERE.
-                if(app.isNetworkAvailable()) {
-                    updateTweets(false);
-                }
-            }
-        };
-
-        Timer timer = new Timer();
-
-        //DELAY: the time to the first execution
-        //PERIODICAL_TIME: the time between each execution of your task.
-        timer.schedule(
-                timerTask,
-                DELAY,
-                getUpdatePeriod() //PERIODICAL_TIME
-        );
-
-        // WITH HANDLER
-
-
     }
 
     protected long getUpdatePeriod(){
@@ -299,6 +288,7 @@ public class TimelineFragment extends Fragment {
     public class FetchPublicOnlineTweetTask extends AsyncTask<Bundle, Void, List<TweetItem>> {
 
         private final String LOG_TAG = FetchPublicOnlineTweetTask.class.getSimpleName();
+        // FIXME: 18-05-2016 shouldn't be hardcoded
         private final int maxPubTweets = 10;
 
         private final Context mContext;
@@ -350,7 +340,7 @@ public class TimelineFragment extends Fragment {
         protected void onPostExecute(List<TweetItem> result) {
 
             if (result != null) {
-                Log.d(LOG_TAG, "I GOT SOMETHING FROM SERVER");
+//                Log.d(LOG_TAG, "I GOT SOMETHING FROM SERVER");
                 timeline.clear();
                 for(TweetItem tweet : result) {
                     timeline.add(tweet);

@@ -35,7 +35,9 @@ public class TwitterCopyCatApplication extends SugarApp {
     private LinkedList<String> offlineTweets = new LinkedList<>();
     private DisplayImageOptions options;
     // Implementation of singleton pattern
-    private static TwitterCopyCatApplication instance ;
+    private static TwitterCopyCatApplication instance;
+
+    private static boolean activityVisible;
 
     @Override
     public void onCreate()
@@ -45,7 +47,7 @@ public class TwitterCopyCatApplication extends SugarApp {
         // Implementation of singleton pattern
         instance = this;
 
-        // TODO: 11-05-2016 change to default shared preferences 
+        // TODO: 11-05-2016 change to default shared preferences
         // FIXME: 11-05-2016 bug preferences settigs saved in different files
         // Define application shared preferences
         _sharedPrefs = getSharedPreferences(SHARED_PREFS_FILENAME, Context.MODE_PRIVATE);
@@ -74,6 +76,20 @@ public class TwitterCopyCatApplication extends SugarApp {
         options  = new DisplayImageOptions.Builder().cacheInMemory(true).build();
         ImageLoader.getInstance().init(config);
     }
+
+
+    public static boolean isActivityVisible() {
+        return activityVisible;
+    }
+
+    public static void activityResumed() {
+        activityVisible = true;
+    }
+
+    public static void activityPaused() {
+        activityVisible = false;
+    }
+
 
     // Implementation of singleton pattern
     public static TwitterCopyCatApplication getInstance() {
