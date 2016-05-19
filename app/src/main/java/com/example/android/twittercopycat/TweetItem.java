@@ -6,6 +6,17 @@ import android.os.Parcelable;
 import com.orm.SugarRecord;
 
 public class TweetItem extends SugarRecord implements Parcelable {
+
+    // table columns
+    public static final String TABLE_NAME = "tweet_item";
+    public static final String TWEET_ID_COLUMN_NAME = "tweet_id";
+    public static final String AUTHOR_NAME_COLUMN_NAME = "author_name";
+    public static final String AUTHOR_PICTURE_COLUMN_NAME = "author_picture";
+    public static final String AUTHOR_DESCRIPTION_COLUMN_NAME = "author_description";
+    public static final String DATE_COLUMN_NAME = "date";
+    public static final String TEXT_COLUMN_NAME = "text";
+    public static final String IS_PUBLIC_COLUMN_NAME = "is_public";
+
     private long tweetId;               //id
     private String authorName;          //author_name
     private String authorPicture;       //author_picture

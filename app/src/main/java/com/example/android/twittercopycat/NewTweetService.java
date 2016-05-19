@@ -43,19 +43,21 @@ public class NewTweetService extends IntentService {
         TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
 
         // Get last tweet saved into database
-        String highestIdQuery =
-                "SELECT * " +
-                "FROM tweet_item " +
-                "WHERE is_public=1 " +
-                "AND tweet_id IN (" +
-                        "SELECT MAX(tweet_id) " +
-                        "FROM tweet_item)";
-        List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery);
+        String highestIdQuery = String.format(
+                        "SELECT * FROM %s WHERE %s = ? AND %s IN (SELECT MAX(%s) FROM %s)",
+                        TweetItem.TABLE_NAME,
+                        TweetItem.IS_PUBLIC_COLUMN_NAME,
+                        TweetItem.TWEET_ID_COLUMN_NAME,
+                        TweetItem.TWEET_ID_COLUMN_NAME,
+                        TweetItem.TABLE_NAME
+        );
+
+        List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery, "1");
         
         
         
-        List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery);
-        // TODO: 18-05-2016 query builder see image with string format 
+//        List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery);
+        // TODO: 18-05-2016 query builder see image with string format
         
         
         if(!offTweets.isEmpty()){
