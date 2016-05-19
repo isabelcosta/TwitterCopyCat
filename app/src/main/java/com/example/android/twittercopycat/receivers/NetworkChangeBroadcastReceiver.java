@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +7,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.android.twittercopycat.helpers.Constants;
+import com.example.android.twittercopycat.services.MySendOfflineService;
+import com.example.android.twittercopycat.TwitterCopyCatApplication;
 
 public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
 

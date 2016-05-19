@@ -1,10 +1,13 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.screens;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+
+import com.example.android.twittercopycat.R;
+import com.example.android.twittercopycat.TwitterCopyCatApplication;
 
 public class SplashScreen extends Activity {
 

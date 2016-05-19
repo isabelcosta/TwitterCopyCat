@@ -4,7 +4,7 @@
 
     <PreferenceCategory android:title="@string/pref_timeline_setting" >
 
-        <com.example.android.twittercopycat.NumberPickerPreference
+        <com.example.android.twittercopycat.helpers.NumberPickerPreference
             android:key="prefNumberOfTweets"
             android:defaultValue="5"
             android:title="@string/pref_number_of_tweets"

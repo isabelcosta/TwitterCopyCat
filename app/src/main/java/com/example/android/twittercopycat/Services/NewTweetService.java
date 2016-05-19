@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.services;
 
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -7,6 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.example.android.twittercopycat.screens.PublicTimelineScreen;
+import com.example.android.twittercopycat.R;
+import com.example.android.twittercopycat.entities.TweetItem;
+import com.example.android.twittercopycat.TwitterCopyCatApplication;
 
 import java.util.List;
 

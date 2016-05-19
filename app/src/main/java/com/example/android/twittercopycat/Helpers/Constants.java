@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.helpers;
 
 /**
  * Created by IsabelCosta on 20-04-2016.

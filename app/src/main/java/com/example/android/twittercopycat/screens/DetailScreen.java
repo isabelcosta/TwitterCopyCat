@@ -1,10 +1,14 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.screens;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.twittercopycat.R;
+import com.example.android.twittercopycat.entities.TweetItem;
+import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.helpers.Constants;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class DetailScreen extends AppCompatActivity {

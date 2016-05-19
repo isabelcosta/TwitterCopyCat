@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.android.twittercopycat.R;
+import com.example.android.twittercopycat.entities.TweetItem;
+import com.example.android.twittercopycat.helpers.Constants;
+import com.example.android.twittercopycat.screens.DetailScreen;
 
 import java.util.ArrayList;
 import java.util.List;

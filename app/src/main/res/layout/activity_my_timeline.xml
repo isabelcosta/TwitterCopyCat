@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyTimelineScreen"
+    tools:context=".screens.MyTimelineScreen"
     android:orientation="vertical">
 
         <RelativeLayout
@@ -90,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/tweetField"
-                tools:context=".PublicTimelineScreen"
+                tools:context=".screens.PublicTimelineScreen"
                 tools:ignore="MergeRootFrame" />
 
         </RelativeLayout>

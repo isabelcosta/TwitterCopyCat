@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.entities;
 
 import android.os.Parcel;
 import android.os.Parcelable;

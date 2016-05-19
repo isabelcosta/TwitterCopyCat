@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,6 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.android.twittercopycat.R;
+import com.example.android.twittercopycat.entities.TweetItem;
+import com.example.android.twittercopycat.helpers.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +53,8 @@ public class MyTimelineFragment extends TimelineFragment {
     public static MyTimelineFragment newInstance(String username, String password) {
         MyTimelineFragment fragment = new MyTimelineFragment();
         Bundle args = new Bundle();
-        args.putString(USERNAME, username);
-        args.putString(PASSWORD, password);
+        args.putString(Constants.USERNAME, username);
+        args.putString(Constants.PASSWORD, password);
         fragment.setArguments(args);
         return fragment;
     }
@@ -139,8 +143,8 @@ public class MyTimelineFragment extends TimelineFragment {
 
     @Override
     protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG, int maxMyTweets) {
-        String username = params.getString(USERNAME);
-        String password = params.getString(PASSWORD);
+        String username = params.getString(Constants.USERNAME);
+        String password = params.getString(Constants.PASSWORD);
         Twitter t = new Twitter(username, password);
 
         Log.d(LOG_TAG, "USERNAME: " + username);

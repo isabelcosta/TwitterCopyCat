@@ -1,9 +1,12 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.services;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.android.twittercopycat.R;
+import com.example.android.twittercopycat.TwitterCopyCatApplication;
 
 import java.util.LinkedList;
 import java.util.List;

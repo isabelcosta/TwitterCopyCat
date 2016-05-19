@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashScreen"
+            android:name=".screens.SplashScreen"
             android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,24 +31,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginScreen"
+            android:name=".screens.LoginScreen"
             android:label="@string/title_activity_login" />
         <activity
-            android:name=".MyTimelineScreen"
+            android:name=".screens.MyTimelineScreen"
             android:label="@string/title_activity_my_timeline" />
         <activity
-            android:name=".DetailScreen"
+            android:name=".screens.DetailScreen"
             android:label="@string/title_activity_detail" />
         <activity
-            android:name=".PublicTimelineScreen"
+            android:name=".screens.PublicTimelineScreen"
             android:label="@string/title_activity_timeline" />
         <activity
-            android:name=".SettingsScreen"
+            android:name=".screens.SettingsScreen"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MyTimelineScreen">
+            android:parentActivityName=".screens.MyTimelineScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.twittercopycat.MyTimelineScreen" />
+                android:value=".screens.MyTimelineScreen" />
         </activity>
 
         <!-- Sugar Related Attributes -->
@@ -68,7 +68,7 @@
         <!-- Broadcast Receiver -->
 
         <receiver
-            android:name=".NetworkChangeBroadcastReceiver"
+            android:name=".receivers.NetworkChangeBroadcastReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -79,11 +79,11 @@
         <!-- Services -->
 
         <service
-            android:name=".MySendOfflineService"
+            android:name=".services.MySendOfflineService"
             android:exported="false" />
 
         <receiver
-            android:name=".MyAlarmReceiver"
+            android:name=".receivers.MyAlarmReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -92,7 +92,7 @@
         </receiver>
 
         <service
-            android:name=".NewTweetService"
+            android:name=".services.NewTweetService"
             android:exported="false"></service>
     </application>
 

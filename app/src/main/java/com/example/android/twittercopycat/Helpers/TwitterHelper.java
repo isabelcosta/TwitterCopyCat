@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.helpers;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -6,6 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.example.android.twittercopycat.R;
+import com.example.android.twittercopycat.fragments.TimelineFragment;
+import com.example.android.twittercopycat.TwitterCopyCatApplication;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.helpers;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

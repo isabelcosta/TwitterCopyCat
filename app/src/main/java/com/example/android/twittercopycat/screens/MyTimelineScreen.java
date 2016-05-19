@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.screens;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,6 +20,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.android.twittercopycat.fragments.MyTimelineFragment;
+import com.example.android.twittercopycat.R;
+import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.helpers.TwitterHelper;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;

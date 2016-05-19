@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.android.twittercopycat.R;
+import com.example.android.twittercopycat.entities.TweetItem;
+import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.helpers.Constants;
+import com.example.android.twittercopycat.screens.DetailScreen;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,8 +42,6 @@ import winterwell.jtwitter.Twitter;
 public class TimelineFragment extends Fragment {
 
     protected static final String LOG_TAG = "TimelineFragment";
-    protected static final String USERNAME = Constants.USERNAME;
-    protected static final String PASSWORD = Constants.PASSWORD;
     private static int DELAY = 15000;
     private static int PERIODICAL_TIME = 15000;
 
@@ -58,27 +62,21 @@ public class TimelineFragment extends Fragment {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            long time = getUpdatePeriod();
-            // FIXME: 16-05-2016 this is awfully done needs to stop the handler when the user
-//
-//            if(isPublic()){
-//
-//            } else {}
-//
+        long time = getUpdatePeriod();
+        // FIXME: 16-05-2016 this is awfully done needs to stop the handler when the user
 
+        // chooses to update its timeline manually if time =-1
 
-            // chooses to update its timeline manually if time =-1
-
-            Log.d(LOG_TAG, "Sync time is " + String.valueOf(time));
-            Log.d(LOG_TAG, "Is Timeline onResume? " + String.valueOf(TwitterCopyCatApplication.isActivityVisible()));
-            if(TwitterCopyCatApplication.isActivityVisible()){
-                if(time != -1){
-                    if(app.isNetworkAvailable()) {
-                        updateTweets(false);
-                    }
-                    handler.postDelayed(this, time);
+        Log.d(LOG_TAG, "Sync time is " + String.valueOf(time));
+        Log.d(LOG_TAG, "Is Timeline onResume? " + String.valueOf(TwitterCopyCatApplication.isActivityVisible()));
+        if(TwitterCopyCatApplication.isActivityVisible()){
+            if(time != -1){
+                if(app.isNetworkAvailable()) {
+                    updateTweets(false);
                 }
+                handler.postDelayed(this, time);
             }
+        }
         }
     };
 
@@ -108,8 +106,8 @@ public class TimelineFragment extends Fragment {
     public static TimelineFragment newInstance(String username, String password) {
         TimelineFragment fragment = new TimelineFragment();
         Bundle args = new Bundle();
-        args.putString(USERNAME, username);
-        args.putString(PASSWORD, password);
+        args.putString(Constants.USERNAME, username);
+        args.putString(Constants.PASSWORD, password);
         fragment.setArguments(args);
         return fragment;
     }
@@ -121,8 +119,8 @@ public class TimelineFragment extends Fragment {
         app = TwitterCopyCatApplication.getInstance();
 
         if (getArguments() != null) {
-            username = getArguments().getString(USERNAME);
-            password = getArguments().getString(PASSWORD);
+            username = getArguments().getString(Constants.USERNAME);
+            password = getArguments().getString(Constants.PASSWORD);
         }
 
         timeline = new ArrayList<TweetItem>();
@@ -224,7 +222,7 @@ public class TimelineFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    protected void updateTweets(boolean offline) {
+    public void updateTweets(boolean offline) {
         Log.d(LOG_TAG, "TIMINGGGG    ?    " + String.valueOf(getUpdatePeriod()));
         Log.d(LOG_TAG, "NUMBERTWEETS ?    " + String.valueOf(app.getNumberOfTweetsPref()));
         Log.d(LOG_TAG, "WIFI ONLY    ?    " + String.valueOf(app.getWifiOnlyPref()));
@@ -235,8 +233,8 @@ public class TimelineFragment extends Fragment {
         } else {
             Bundle args = new Bundle();
             if(!isPublic()) {
-                args.putString(USERNAME, username);
-                args.putString(PASSWORD, password);
+                args.putString(Constants.USERNAME, username);
+                args.putString(Constants.PASSWORD, password);
             }
             FetchPublicOnlineTweetTask tweetTask = new FetchPublicOnlineTweetTask(getActivity(), timeline);
             tweetTask.execute(args);

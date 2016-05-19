@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -6,6 +6,10 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
+
+import com.example.android.twittercopycat.R;
+import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.helpers.Constants;
 
 /**
  * Created by IsabelCosta on 11-05-2016.
