@@ -13,7 +13,8 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:weightSum="1">
 
         <LinearLayout
             android:orientation="vertical"
@@ -25,12 +26,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Mr. Pinguin"
+                android:text="@string/tweet_user_name"
                 android:id="@+id/textView_name" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/tweet_user_description"
                 android:layout_alignBottom="@+id/textView_name"
                 android:id="@+id/textView_description" />
         </LinearLayout>
@@ -48,11 +50,14 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:text="@string/tweet_text"
             android:id="@+id/textView_tweet"
             android:layout_weight="1" />
 
@@ -60,17 +65,20 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:layout_weight="1">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ID: #112"
+                android:layout_gravity="start"
                 android:id="@+id/textView_id" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:text="2016 March, 16th "
                 android:id="@+id/textView_date" />
         </LinearLayout>
