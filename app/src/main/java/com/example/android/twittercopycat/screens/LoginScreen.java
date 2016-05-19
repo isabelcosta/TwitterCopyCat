@@ -198,7 +198,7 @@ public class LoginScreen extends AppCompatActivity implements LoaderCallbacks<Cu
         if (!TwitterCopyCatApplication.getInstance().isNetworkAvailable()) {
             Toast.makeText(
                     getApplicationContext(),
-                    "No internet connection. \nCheck your internet connection, please!",
+                    getString(R.string.no_internet_connection),
                     Toast.LENGTH_SHORT
             ).show();
             return;
@@ -246,14 +246,12 @@ public class LoginScreen extends AppCompatActivity implements LoaderCallbacks<Cu
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         //email.contains("@")
         //email.compareTo(USERNAME) == 0
         return true;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         //password.length() > 4
         //password.compareTo(PASSWORD) == 0
         return password.length() > 4;
@@ -357,7 +355,7 @@ public class LoginScreen extends AppCompatActivity implements LoaderCallbacks<Cu
 
         private final String mEmail;
         private final String mPassword;
-        private final String apiUrl = "http://yamba.newcircle.com/api";
+        private final String apiUrl = TwitterCopyCatApplication.getInstance().getApiUrl();
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -366,7 +364,6 @@ public class LoginScreen extends AppCompatActivity implements LoaderCallbacks<Cu
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             try {
                 // Simulate network access.
@@ -381,9 +378,6 @@ public class LoginScreen extends AppCompatActivity implements LoaderCallbacks<Cu
             Log.d(TAG, isLogged.toString());
 
             return isLogged;
-
-            // TODO: register the new account here.
-            // return true;
         }
 
         @Override

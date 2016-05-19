@@ -47,46 +47,49 @@ public class NewTweetService extends IntentService {
 
         TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
 
-        // Get last tweet saved into database
-        String highestIdQuery = String.format(
-                        "SELECT * FROM %s WHERE %s = ? AND %s IN (SELECT MAX(%s) FROM %s)",
-                        TweetItem.TABLE_NAME,
-                        TweetItem.IS_PUBLIC_COLUMN_NAME,
-                        TweetItem.TWEET_ID_COLUMN_NAME,
-                        TweetItem.TWEET_ID_COLUMN_NAME,
-                        TweetItem.TABLE_NAME
-        );
+        if(app.isNetworkAvailable()){
 
-        List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery, "1");
-        
-        
-        
-//        List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery);
-        // TODO: 18-05-2016 query builder see image with string format
-        
-        
-        if(!offTweets.isEmpty()){
-            Log.d(LOG_TAG, "Offline Tweets results da query are not empty");
-            long lastSavedTweetID = offTweets.get(0).getTweetId();
+            // Get last tweet saved into database
+            String highestIdQuery = String.format(
+                            "SELECT * FROM %s WHERE %s = ? AND %s IN (SELECT MAX(%s) FROM %s)",
+                            TweetItem.TABLE_NAME,
+                            TweetItem.IS_PUBLIC_COLUMN_NAME,
+                            TweetItem.TWEET_ID_COLUMN_NAME,
+                            TweetItem.TWEET_ID_COLUMN_NAME,
+                            TweetItem.TABLE_NAME
+            );
 
-            Twitter t = new Twitter();
-            t.setAPIRootUrl(app.getApiUrl());
-            t.setCount(1);
+            List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery, "1");
 
-            // Get the last online tweet
-            List<Twitter.Status> onTweets = t.getPublicTimeline();
-            long lastOnlineTweetID = onTweets.get(0).getId();
 
-            // FIXME: 16-05-2016 Query the last tweet
 
-            Log.d(LOG_TAG,"EIS OS IDs: " + String.valueOf(lastOnlineTweetID) + "    " + String.valueOf(lastSavedTweetID));
+    //        List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery);
+            // TODO: 18-05-2016 query builder see image with string format
 
-            if(lastOnlineTweetID != lastSavedTweetID){
-                // Create Notification
-                createNewTweetNotification();
+
+            if(!offTweets.isEmpty()){
+                Log.d(LOG_TAG, "Offline Tweets results da query are not empty");
+                long lastSavedTweetID = offTweets.get(0).getTweetId();
+
+                Twitter t = new Twitter();
+                t.setAPIRootUrl(app.getApiUrl());
+                t.setCount(1);
+
+                // Get the last online tweet
+                List<Twitter.Status> onTweets = t.getPublicTimeline();
+                long lastOnlineTweetID = onTweets.get(0).getId();
+
+                // FIXME: 16-05-2016 Query the last tweet
+
+                Log.d(LOG_TAG,"EIS OS IDs: " + String.valueOf(lastOnlineTweetID) + "    " + String.valueOf(lastSavedTweetID));
+
+                if(lastOnlineTweetID != lastSavedTweetID){
+                    // Create Notification
+                    createNewTweetNotification();
+                }
+
+                Log.d(LOG_TAG,"PASSEI POR AQUI");
             }
-
-            Log.d(LOG_TAG,"PASSEI POR AQUI");
         }
     }
 
