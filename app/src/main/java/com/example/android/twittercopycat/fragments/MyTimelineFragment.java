@@ -1,9 +1,7 @@
 package com.example.android.twittercopycat.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,18 +22,10 @@ import winterwell.jtwitter.Twitter;
  * Created by IsabelCosta on 21-04-2016.
  */
 
-
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PublicTimelineFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PublicTimelineFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * MyTimelineFragment is responsible to show sent tweets by the user
  */
 public class MyTimelineFragment extends TimelineFragment {
-
-    private OnFragmentInteractionListener mListener;
 
     public MyTimelineFragment() {
         // Required empty public constructor
@@ -47,7 +37,7 @@ public class MyTimelineFragment extends TimelineFragment {
      *
      * @param username Parameter 1.
      * @param password Parameter 2.
-     * @return A new instance of fragment PublicTimelineFragment.
+     * @return A new instance of fragment MyTimelineFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static MyTimelineFragment newInstance(String username, String password) {
@@ -71,9 +61,10 @@ public class MyTimelineFragment extends TimelineFragment {
         mListAdapter = new ListScreenAdapter(
                 getActivity(),
                 R.layout.list_item_my_tweet,
-                new ArrayList<TweetItem>());
+                new ArrayList<TweetItem>()
+        );
 
-        //PublicTimelineFragment View
+        // MyTimelineFragment View
         View rootView = inflater.inflate(R.layout.fragment_my_timeline_screen, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
@@ -84,11 +75,17 @@ public class MyTimelineFragment extends TimelineFragment {
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    protected View getMyView(TweetItem item, LayoutInflater layoutInflater) {
+        View v = layoutInflater.inflate(R.layout.list_item_my_tweet, null);
+
+        TextView tvDate = (TextView) v.findViewById(R.id.list_item_tweet_date);
+        tvDate.setText(item.getTweetDate());
+
+        TextView tvText = (TextView) v.findViewById(R.id.list_item_tweet_text);
+        tvText.setText(item.getTweetText());
+
+        return v;
     }
 
     @Override
@@ -103,46 +100,7 @@ public class MyTimelineFragment extends TimelineFragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
-    protected View getMyView(TweetItem item, LayoutInflater layoutInflater) {
-        View v = layoutInflater.inflate(R.layout.list_item_my_tweet, null);
-
-        TextView tvDate = (TextView) v.findViewById(R.id.list_item_tweet_date);
-        tvDate.setText(item.getTweetDate());
-
-        TextView tvText = (TextView) v.findViewById(R.id.list_item_tweet_text);
-        tvText.setText(item.getTweetText()); //should only show first 20 characters
-
-        return v;
-    }
-
-    @Override
-    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG, int maxMyTweets) {
+    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG) {
         String username = params.getString(Constants.USERNAME);
         String password = params.getString(Constants.PASSWORD);
         Twitter t = new Twitter(username, password);
@@ -151,7 +109,7 @@ public class MyTimelineFragment extends TimelineFragment {
         Log.d(LOG_TAG, "PASSWORD: " + password);
 
         t.setAPIRootUrl(API_URL);
-        t.setCount(maxMyTweets);
+        t.setCount(params.getInt(Constants.MAX_TWEETS));
         return t.getUserTimeline();
     }
 

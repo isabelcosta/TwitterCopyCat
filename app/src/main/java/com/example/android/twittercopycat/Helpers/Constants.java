@@ -13,6 +13,7 @@ public final class Constants {
     public static String IS_FIRST_TIME = "is_first_time";
     public static String USERNAME = "username";
     public static String PASSWORD = "password";
+    public static String MAX_TWEETS = "max_tweets";
     public static String NUMBER_OF_TWEETS_PREF = "prefNumberOfTweets";
     public static String WIFI_ONLY_PREF = "prefWifiOnlySwitch";
     public static String SYNC_FREQUENCY_PREF = "prefSyncFrequency";

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="max_characters">140</integer>
+    <integer name="max_tweet_menu_item_characters">20</integer>
+    <integer name="last_public_tweets">10</integer>
 </resources>

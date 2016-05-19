@@ -1,7 +1,6 @@
 package com.example.android.twittercopycat.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,16 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.android.twittercopycat.R;
-import com.example.android.twittercopycat.entities.TweetItem;
 import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.entities.TweetItem;
 import com.example.android.twittercopycat.helpers.Constants;
-import com.example.android.twittercopycat.screens.DetailScreen;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -123,7 +120,7 @@ public class TimelineFragment extends Fragment {
             password = getArguments().getString(Constants.PASSWORD);
         }
 
-        timeline = new ArrayList<TweetItem>();
+        timeline = new ArrayList<>();
 
         handler.postDelayed(runnable, 100);
     }
@@ -139,37 +136,37 @@ public class TimelineFragment extends Fragment {
             return -1;
         }
     }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        mListAdapter = new ListScreenAdapter(
-                getActivity(),
-                R.layout.list_item_public_tweet,
-                new ArrayList<TweetItem>());
-
-        //PublicTimelineFragment View
-        View rootView = inflater.inflate(R.layout.fragment_public_timeline_screen, container, false);
-
-        // Get a reference to the ListView, and attach this adapter to it.
-        mListView = (ListView) rootView.findViewById(R.id.listview_all_tweets);
-        mListView.setAdapter(mListAdapter);
-
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                TweetItem tweet = mListAdapter.getItem(position);
-
-                Intent intent = new Intent(getActivity(), DetailScreen.class)
-                        .putExtra(Constants.TWEET_ITEM, tweet);
-                startActivity(intent);
-            }
-        });
-
-        // Inflate the layout for this fragment
-        return rootView;
-    }
+//
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//
+//        mListAdapter = new ListScreenAdapter(
+//                getActivity(),
+//                R.layout.list_item_public_tweet,
+//                new ArrayList<TweetItem>());
+//
+//        //PublicTimelineFragment View
+//        View rootView = inflater.inflate(R.layout.fragment_public_timeline_screen, container, false);
+//
+//        // Get a reference to the ListView, and attach this adapter to it.
+//        mListView = (ListView) rootView.findViewById(R.id.listview_all_tweets);
+//        mListView.setAdapter(mListAdapter);
+//
+//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                TweetItem tweet = mListAdapter.getItem(position);
+//
+//                Intent intent = new Intent(getActivity(), DetailScreen.class)
+//                        .putExtra(Constants.TWEET_ITEM, tweet);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        // Inflate the layout for this fragment
+//        return rootView;
+//    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -223,19 +220,26 @@ public class TimelineFragment extends Fragment {
     }
 
     public void updateTweets(boolean offline) {
-        Log.d(LOG_TAG, "TIMINGGGG    ?    " + String.valueOf(getUpdatePeriod()));
-        Log.d(LOG_TAG, "NUMBERTWEETS ?    " + String.valueOf(app.getNumberOfTweetsPref()));
-        Log.d(LOG_TAG, "WIFI ONLY    ?    " + String.valueOf(app.getWifiOnlyPref()));
+        Log.d(LOG_TAG, "Sync period       ?    " + String.valueOf(getUpdatePeriod()));
+        Log.d(LOG_TAG, "Number of tweets  ?    " + String.valueOf(app.getNumberOfTweetsPref()));
+        Log.d(LOG_TAG, "Wifi only mode    ?    " + String.valueOf(app.getWifiOnlyPref()));
 
         if(offline){
             FetchPublicOfflineTweetTask tweetTask = new FetchPublicOfflineTweetTask(getActivity(), timeline);
             tweetTask.execute();
         } else {
             Bundle args = new Bundle();
+
+            int maxTweets = isPublic()
+                    ? getResources().getInteger(R.integer.last_public_tweets)
+                    : app.getNumberOfTweetsPref();
+
+            args.putInt(Constants.MAX_TWEETS, maxTweets);
             if(!isPublic()) {
                 args.putString(Constants.USERNAME, username);
                 args.putString(Constants.PASSWORD, password);
             }
+
             FetchPublicOnlineTweetTask tweetTask = new FetchPublicOnlineTweetTask(getActivity(), timeline);
             tweetTask.execute(args);
         }
@@ -276,7 +280,7 @@ public class TimelineFragment extends Fragment {
     private String getReadableDateString(Date date){
         // Because the API returns a unix timestamp (measured in seconds),
         // it must be converted to milliseconds in order to be converted to valid date.
-        SimpleDateFormat format = new SimpleDateFormat("E, MMM d");
+        SimpleDateFormat format = new SimpleDateFormat("E, MMM d - h:mm a");
         return format.format(date).toString();
     }
 
@@ -286,8 +290,6 @@ public class TimelineFragment extends Fragment {
     public class FetchPublicOnlineTweetTask extends AsyncTask<Bundle, Void, List<TweetItem>> {
 
         private final String LOG_TAG = FetchPublicOnlineTweetTask.class.getSimpleName();
-        // FIXME: 18-05-2016 shouldn't be hardcoded
-        private final int maxPubTweets = 10;
 
         private final Context mContext;
         private List<TweetItem> timeline;
@@ -303,9 +305,8 @@ public class TimelineFragment extends Fragment {
         protected List<TweetItem> doInBackground(Bundle... params) {
 
             List<Twitter.Status> fetchedTimeline = getFetchedOnlineTimeline(
-                    params.length == 0 ? null : params[0],
-                    LOG_TAG,
-                    isPublic() ? maxPubTweets : app.getNumberOfTweetsPref()
+                    params[0],
+                    LOG_TAG
             );
 
             if(fetchedTimeline == null){
@@ -323,7 +324,7 @@ public class TimelineFragment extends Fragment {
                         tweet.getUser().getName(),                          //author's name
                         tweet.getUser().getProfileImageUrl().toString(),    //author's picture
                         tweet.getUser().getDescription(),                   //author's description
-                        tweet.getCreatedAt().toString(),                    //date
+                        getReadableDateString(tweet.getCreatedAt()),                    //date
                         tweet.getText(),                                    //tweet text
                         isPublic()
                 );
@@ -338,7 +339,6 @@ public class TimelineFragment extends Fragment {
         protected void onPostExecute(List<TweetItem> result) {
 
             if (result != null) {
-//                Log.d(LOG_TAG, "I GOT SOMETHING FROM SERVER");
                 timeline.clear();
                 for(TweetItem tweet : result) {
                     timeline.add(tweet);
@@ -350,7 +350,7 @@ public class TimelineFragment extends Fragment {
     }
 
     /**
-     * Tweet Offline Fetching
+     * Offline Tweet Fetching
      */
     public class FetchPublicOfflineTweetTask extends AsyncTask<Void, Void, List<TweetItem>> {
 
@@ -398,14 +398,10 @@ public class TimelineFragment extends Fragment {
     }
 
     protected List<TweetItem> getFetchedOfflineTimeline() {
-//        For SugarDB testing purposes
-//        List<TweetItem> t1 = TweetItem.listAll(TweetItem.class, "id");
-//        List<TweetItem> t2 = TweetItem.find(TweetItem.class, "is_public = ?", String.valueOf(isPublic()));
-//        List<TweetItem> t3 = TweetItem.find(TweetItem.class, "is_public = ?", "0");
-//        List<TweetItem> t4 = TweetItem.find(TweetItem.class, "is_public = ?", "1");
-//        List<TweetItem> t4 = TweetItem.find(TweetItem.class, "is_public = ?", "1");
-//        List<TweetItem> t5 = Select.from(TweetItem.class).whereOr(Condition.prop("is_public").eq(String.valueOf(isPublic()))).list();
-        return TweetItem.find(TweetItem.class, "is_public = ?", isPublic() ? "1" : "0");
+        return TweetItem.find(
+                TweetItem.class,
+                String.format("%s = ?", TweetItem.IS_PUBLIC_COLUMN_NAME),
+                isPublic() ? "1" : "0");
     }
 
     protected void deleteOldTweets(){
@@ -416,7 +412,7 @@ public class TimelineFragment extends Fragment {
     }
 
     //defined in child classes
-    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG, int maxMyTweets) {
+    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG) {
         return null;
     }
 
