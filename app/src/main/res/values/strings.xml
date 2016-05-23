@@ -51,15 +51,18 @@
     <string name="no">No</string>
     <string name="are_you_sure">Are you sure?</string>
 
-    <!--Error messages-->
+    <!--Error/Alert messages-->
 
     <string name="invalid_number_of_characters">Invalid number of characters</string>
     <string name="unable_to_send_tweet">Your Tweet couldn\'t be sent now. We\'ll send it later ;)</string>
     <string name="no_internet_connection">No internet connection. \nCheck your internet connection, please!</string>
-
-    <!--Alert messages-->
-
+    <string name="cant_refresh">You cannot refresh you tweets, because you\'re not connected to the internet.</string>
+    <string name="tweet_sent_success">Your tweet was sent!</string>
     <string name="offline_tweets_sent">Your offline tweet were sent!</string>
+
+    <!--Notification messages-->
+    <string name="notification_title_tweet">New Tweet!</string>
+    <string name="notification_text_tweet">You have unread tweets :D</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

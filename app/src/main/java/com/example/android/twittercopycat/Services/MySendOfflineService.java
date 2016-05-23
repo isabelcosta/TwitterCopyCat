@@ -40,7 +40,7 @@ public class MySendOfflineService extends IntentService {
             for(String tweet : tweetsCopy) {
                 t.updateStatus(tweet);
                 Log.d(LOG_TAG, "Sending this tweet: " + tweet);
-                Log.d(LOG_TAG, "Removing this tweet: " + app.removeSentOfflineTweet());
+//                Log.d(LOG_TAG, "Removing this tweet: " + app.removeSentOfflineTweet());
             }
 
             Toast.makeText(

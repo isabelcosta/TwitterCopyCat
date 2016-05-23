@@ -46,10 +46,13 @@
     <string name="invalid_number_of_characters">Número de caracteres inválidos</string>
     <string name="unable_to_send_tweet">O seu tweet não pode ser enviado agora. Será enviado mais tarde.</string>
     <string name="no_internet_connection">Sem ligação a internet. Verifique a sua ligação, por favor.</string>
+    <string name="cant_refresh">Não podes atualizar os tweets porque não tens conexão à internet</string>
+    <string name="tweet_sent_success">O teu tweet foi enviado comm sucesso!</string>
+    <string name="offline_tweets_sent">Os teus offline tweets foram agora enviados!</string>
 
-    <!--Alert messages-->
-
-    <string name="offline_tweets_sent">Os seus tweets enviados offline acabaram de ser enviados!</string>
+    <!--Notification messages-->
+    <string name="notification_title_tweet">Novo Tweet!</string>
+    <string name="notification_text_tweet">Tens novos tweets por ler :D</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="welcome_to_my_timeline">Bem-vindo a minha Timeline</string>

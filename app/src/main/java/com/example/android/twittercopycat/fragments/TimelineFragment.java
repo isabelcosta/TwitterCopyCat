@@ -127,7 +127,7 @@ public class TimelineFragment extends Fragment {
 
     protected long getUpdatePeriod(){
         if(isPublic()){
-            return  getTimeInMiliSeconds(Long.valueOf(0), Long.valueOf(0), Long.valueOf(15));
+            return  getTimeInMiliSeconds(Long.valueOf(0), Long.valueOf(0), Long.valueOf(Constants.PUBLIC_SYNC_PERIOD));
         } else {
             long interval = app.getSyncFrequencyPref();
             if(interval != -1){
@@ -136,37 +136,6 @@ public class TimelineFragment extends Fragment {
             return -1;
         }
     }
-//
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//
-//        mListAdapter = new ListScreenAdapter(
-//                getActivity(),
-//                R.layout.list_item_public_tweet,
-//                new ArrayList<TweetItem>());
-//
-//        //PublicTimelineFragment View
-//        View rootView = inflater.inflate(R.layout.fragment_public_timeline_screen, container, false);
-//
-//        // Get a reference to the ListView, and attach this adapter to it.
-//        mListView = (ListView) rootView.findViewById(R.id.listview_all_tweets);
-//        mListView.setAdapter(mListAdapter);
-//
-//        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                TweetItem tweet = mListAdapter.getItem(position);
-//
-//                Intent intent = new Intent(getActivity(), DetailScreen.class)
-//                        .putExtra(Constants.TWEET_ITEM, tweet);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        // Inflate the layout for this fragment
-//        return rootView;
-//    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -324,7 +293,7 @@ public class TimelineFragment extends Fragment {
                         tweet.getUser().getName(),                          //author's name
                         tweet.getUser().getProfileImageUrl().toString(),    //author's picture
                         tweet.getUser().getDescription(),                   //author's description
-                        getReadableDateString(tweet.getCreatedAt()),                    //date
+                        getReadableDateString(tweet.getCreatedAt()),        //date
                         tweet.getText(),                                    //tweet text
                         isPublic()
                 );

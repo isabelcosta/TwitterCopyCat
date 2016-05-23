@@ -18,4 +18,5 @@ public final class Constants {
     public static String WIFI_ONLY_PREF = "prefWifiOnlySwitch";
     public static String SYNC_FREQUENCY_PREF = "prefSyncFrequency";
     public static String API_URL = "http://yamba.newcircle.com/api";
+    public static int PUBLIC_SYNC_PERIOD = 15;
 }

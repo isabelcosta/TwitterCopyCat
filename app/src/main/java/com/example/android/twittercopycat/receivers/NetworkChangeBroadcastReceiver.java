@@ -12,6 +12,9 @@ import com.example.android.twittercopycat.helpers.Constants;
 import com.example.android.twittercopycat.services.MySendOfflineService;
 import com.example.android.twittercopycat.TwitterCopyCatApplication;
 
+/**
+ * Detects Network connection either mobile or wifi
+ */
 public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
 
     private static String TAG = "NetworkChangeBroadcastReceiver";
@@ -19,8 +22,6 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
     public NetworkChangeBroadcastReceiver() {
     }
 
-    // TODO: 04-05-2016 detect when connection is available to send tweets  
-    
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -43,18 +44,23 @@ public class NetworkChangeBroadcastReceiver extends BroadcastReceiver {
 
         // TODO: 16-05-2016 Possibly improve this if condition
         if (TwitterCopyCatApplication.getInstance().getWifiOnlyPref()){
-            if (isWiFi) { // Send offline tweet only through wifi
+            if (isWiFi) {
+                // Send offline tweet only through wifi
                 // Start sending offline tweets
                 Intent sendOfflineTweetsIntent = new Intent(context, MySendOfflineService.class);
                 context.startService(sendOfflineTweetsIntent);
             }
-        } else { // Send offline tweet through any "type of connection"
+        } else {
+            // Send offline tweet through any "type of connection"
             if (isWiFi || isMobile) {
                 // Start sending offline tweets
                 Intent sendOfflineTweetsIntent = new Intent(context, MySendOfflineService.class);
                 context.startService(sendOfflineTweetsIntent);
             }
         }
+
+        // Alert the user for network connection
+
         if (isWiFi || isMobile) {
             mode = Constants.ONLINE_MODE;
         } else {

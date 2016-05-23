@@ -18,11 +18,7 @@ import java.util.List;
 import winterwell.jtwitter.Twitter;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p/>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
+ * Service that searches for new tweet to notify the user
  */
 public class NewTweetService extends IntentService {
 
@@ -47,7 +43,7 @@ public class NewTweetService extends IntentService {
 
         TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
 
-        if(app.isNetworkAvailable()){
+        if(app.isNetworkAvailable() && TwitterCopyCatApplication.isActivityVisible()){
 
             // Get last tweet saved into database
             String highestIdQuery = String.format(
@@ -59,13 +55,8 @@ public class NewTweetService extends IntentService {
                             TweetItem.TABLE_NAME
             );
 
+            // Query the TweetItem table for the last public ("1") tweet saved
             List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery, "1");
-
-
-
-    //        List<TweetItem> offTweets = TweetItem.findWithQuery(TweetItem.class, highestIdQuery);
-            // TODO: 18-05-2016 query builder see image with string format
-
 
             if(!offTweets.isEmpty()){
                 Log.d(LOG_TAG, "Offline Tweets results da query are not empty");
@@ -87,8 +78,6 @@ public class NewTweetService extends IntentService {
                     // Create Notification
                     createNewTweetNotification();
                 }
-
-                Log.d(LOG_TAG,"PASSEI POR AQUI");
             }
         }
     }
@@ -98,8 +87,8 @@ public class NewTweetService extends IntentService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(ctx)
                         .setSmallIcon(R.drawable.notification_icon)
-                        .setContentTitle("New Tweet!")
-                        .setContentText("You have new tweets :)")
+                        .setContentTitle(getString(R.string.notification_title_tweet))
+                        .setContentText(getString(R.string.notification_text_tweet))
                         .setAutoCancel(true);
 
         Intent resultIntent = new Intent(ctx, PublicTimelineScreen.class);
@@ -118,9 +107,11 @@ public class NewTweetService extends IntentService {
 
         // Sets an ID for the notification
         int mNotificationId = 001;
+
         // Gets an instance of the NotificationManager service
         NotificationManager mNotifyMgr =
                 (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+
         // Builds the notification and issues it.
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }

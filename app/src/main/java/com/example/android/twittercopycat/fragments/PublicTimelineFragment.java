@@ -72,11 +72,11 @@ public class PublicTimelineFragment extends TimelineFragment {
         View v = layoutInflater.inflate(R.layout.list_item_public_tweet, null);
         int maxCharacters = getResources().getInteger(R.integer.max_tweet_menu_item_characters);
 
-        TextView tvAuthor = (TextView) v.findViewById(R.id.list_item_tweet_author);
-        tvAuthor.setText(item.getTweetAuthorName());
-
-        TextView tvDate = (TextView) v.findViewById(R.id.list_item_tweet_date);
-        tvDate.setText(item.getTweetDate());
+//        TextView tvAuthor = (TextView) v.findViewById(R.id.list_item_tweet_author);
+//        tvAuthor.setText(item.getTweetAuthorName());
+//
+//        TextView tvDate = (TextView) v.findViewById(R.id.list_item_tweet_date);
+//        tvDate.setText(item.getTweetDate());
 
         TextView tvText = (TextView) v.findViewById(R.id.list_item_tweet_text);
         tvText.setText(

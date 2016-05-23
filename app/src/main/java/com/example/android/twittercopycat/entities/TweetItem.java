@@ -7,7 +7,7 @@ import com.orm.SugarRecord;
 
 public class TweetItem extends SugarRecord implements Parcelable {
 
-    // table columns
+    // table columns names
     public static final String TABLE_NAME = "tweet_item";
     public static final String TWEET_ID_COLUMN_NAME = "tweet_id";
     public static final String AUTHOR_NAME_COLUMN_NAME = "author_name";
@@ -17,6 +17,7 @@ public class TweetItem extends SugarRecord implements Parcelable {
     public static final String TEXT_COLUMN_NAME = "text";
     public static final String IS_PUBLIC_COLUMN_NAME = "is_public";
 
+    // persistent attributes
     private long tweetId;               //id
     private String authorName;          //author_name
     private String authorPicture;       //author_picture

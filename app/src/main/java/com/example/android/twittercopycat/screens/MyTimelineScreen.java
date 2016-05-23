@@ -21,10 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.twittercopycat.fragments.MyTimelineFragment;
 import com.example.android.twittercopycat.R;
 import com.example.android.twittercopycat.TwitterCopyCatApplication;
-import com.example.android.twittercopycat.helpers.TwitterHelper;
+import com.example.android.twittercopycat.fragments.MyTimelineFragment;
 
 import winterwell.jtwitter.Twitter;
 import winterwell.jtwitter.TwitterException;
@@ -44,17 +43,13 @@ public class MyTimelineScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //attributes definition
         tweetMaxCharacters = getResources().getInteger(R.integer.max_characters);
         app = TwitterCopyCatApplication.getInstance();
 
         setContentView(R.layout.activity_my_timeline);
+
+        // Hides keyboard to see list of tweets instead the keyboard when entering the screen
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        // Broadcast Receiver....
-//        NetworkChangeBroadcastReceiver networkReceiver = new NetworkChangeBroadcastReceiver();
-//        registerReceiver(networkReceiver, );
-
 
         //find views and adding listeners
         findViews();
@@ -93,6 +88,10 @@ public class MyTimelineScreen extends AppCompatActivity {
     }
 
     // Menu Action Methods
+
+    /**
+     * Refresh action -  updates the list of recent tweets
+     */
     private void menuRefresh(){
         MyTimelineFragment frag = (MyTimelineFragment) getSupportFragmentManager().findFragmentById(R.id.container);
         if(app.isNetworkAvailable()){
@@ -100,18 +99,23 @@ public class MyTimelineScreen extends AppCompatActivity {
         } else {
             Toast.makeText(
                     getApplicationContext(),
-                    "You cannot refresh you tweets, because you're not connected to the internet.",
+                    getString(R.string.cant_refresh),
                     Toast.LENGTH_LONG
             ).show();
         }
     }
 
+    /**
+     * Settings action - opens Settings activity
+     */
     private void menuSettings(){
-//        Intent intent = new Intent(getApplicationContext(), SettingsScreen.class);
         Intent intent = new Intent(getApplicationContext(), SettingsScreen.class);
         startActivity(intent);
     }
 
+    /**
+     * LogOut action - logs out the application
+     */
     private void menuSignOut(){
 
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -139,6 +143,9 @@ public class MyTimelineScreen extends AppCompatActivity {
                 .setNegativeButton(getString(R.string.no), dialogClickListener).show();
     }
 
+    /**
+     * Adds necessary listeners to every view
+     */
     private void addViewListeners(){
 
         sendTweet.setOnClickListener(new View.OnClickListener() {
@@ -148,9 +155,9 @@ public class MyTimelineScreen extends AppCompatActivity {
 
                 if(checkValidTweet(tweet)) {
                     if(app.isNetworkAvailable()){
-                        TwitterHelper.showNotification(tweet, getApplicationContext());
                         SendTweetTask tweetTask = new SendTweetTask(getApplicationContext());
                         tweetTask.execute(tweet);
+
                     } else {
                         Toast.makeText(
                                 getApplicationContext(),
@@ -203,6 +210,11 @@ public class MyTimelineScreen extends AppCompatActivity {
         });
     }
 
+    /**
+     * Checks if tweet is valid
+     * @param tweet string representing a tweet
+     * @return true if tweet is valid to be sent or false if otherwise
+     */
     private boolean checkValidTweet(String tweet){
         if(tweet.length() < 1 || tweet.length() > 140) {
             Context context = getApplicationContext();
@@ -215,6 +227,9 @@ public class MyTimelineScreen extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Finds all views related to MyTimeline activity
+     */
     private void findViews(){
         sendTweet = (Button) findViewById(R.id.button_send_tweet);
         tweetText = (EditText) findViewById(R.id.editText_tweet);
@@ -222,6 +237,11 @@ public class MyTimelineScreen extends AppCompatActivity {
         shareBtn = (ImageView) findViewById(R.id.share_tweet);
     }
 
+    /**
+     * SendTweetTask
+     *
+     * Sends a new tweet
+     */
     public class SendTweetTask extends AsyncTask<String, Void, Boolean> {
 
         private final String LOG_TAG = SendTweetTask.class.getSimpleName();
@@ -255,9 +275,9 @@ public class MyTimelineScreen extends AppCompatActivity {
 
             if (result) {
                 // Sent successfully the tweet.  Hooray!
-                Toast.makeText(mContext, "Your Tweet was sent!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, getString(R.string.tweet_sent_success), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(mContext, "Your Tweet couldn't be sent now. We'll send it later ;) ", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, getString(R.string.unable_to_send_tweet), Toast.LENGTH_LONG).show();
             }
 
             //clear the text box

@@ -50,7 +50,7 @@ public class TwitterCopyCatApplication extends SugarApp {
         instance = this;
 
         // TODO: 11-05-2016 change to default shared preferences
-        // FIXME: 11-05-2016 bug preferences settigs saved in different files
+        // FIXME: 11-05-2016 bug preferences settings saved in different files
         // Define application shared preferences
         _sharedPrefs = getSharedPreferences(SHARED_PREFS_FILENAME, Context.MODE_PRIVATE);
 //        _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -186,8 +186,18 @@ public class TwitterCopyCatApplication extends SugarApp {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
+        boolean isNetAvailable = activeNetworkInfo != null && activeNetworkInfo.isConnected();
+
+        if (isNetAvailable) {
+            if (this.getWifiOnlyPref()) {
+                if(activeNetworkInfo.getType() != ConnectivityManager.TYPE_WIFI){
+                    isNetAvailable = false;
+                }
+            }
+        }
+
         //should check null because in air plan mode it will be null
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        return isNetAvailable;
     }
 
     // Offline tweets methods
