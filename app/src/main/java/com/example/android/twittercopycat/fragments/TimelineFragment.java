@@ -91,6 +91,14 @@ public class TimelineFragment extends Fragment {
         super.onPause();
         TwitterCopyCatApplication.activityPaused();
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        TwitterCopyCatApplication.activityPaused();
+    }
+
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.

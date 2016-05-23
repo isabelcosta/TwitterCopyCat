@@ -43,7 +43,7 @@ public class NewTweetService extends IntentService {
 
         TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
 
-        if(app.isNetworkAvailable() && TwitterCopyCatApplication.isActivityVisible()){
+        if(app.isNetworkAvailable() && !TwitterCopyCatApplication.isActivityVisible()){
 
             // Get last tweet saved into database
             String highestIdQuery = String.format(
