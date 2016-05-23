@@ -11,7 +11,7 @@ import android.util.Log;
 import com.example.android.twittercopycat.screens.PublicTimelineScreen;
 import com.example.android.twittercopycat.R;
 import com.example.android.twittercopycat.entities.TweetItem;
-import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
 
 import java.util.List;
 

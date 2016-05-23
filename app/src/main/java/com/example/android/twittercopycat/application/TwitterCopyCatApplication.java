@@ -1,4 +1,4 @@
-package com.example.android.twittercopycat;
+package com.example.android.twittercopycat.application;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.example.android.twittercopycat.R;
 import com.example.android.twittercopycat.receivers.MyAlarmReceiver;
 import com.example.android.twittercopycat.helpers.Constants;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;

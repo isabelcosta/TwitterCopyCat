@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.android.twittercopycat.R;
-import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
 import com.example.android.twittercopycat.entities.TweetItem;
 import com.example.android.twittercopycat.helpers.Constants;
 

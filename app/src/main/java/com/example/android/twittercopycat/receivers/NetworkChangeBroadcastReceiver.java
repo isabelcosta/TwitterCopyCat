@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.example.android.twittercopycat.helpers.Constants;
 import com.example.android.twittercopycat.services.MySendOfflineService;
-import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
 
 /**
  * Detects Network connection either mobile or wifi

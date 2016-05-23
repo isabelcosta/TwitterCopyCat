@@ -32,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.twittercopycat.R;
-import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.example.android.twittercopycat.R;
 import com.example.android.twittercopycat.entities.TweetItem;
-import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
 import com.example.android.twittercopycat.helpers.Constants;
 import com.nostra13.universalimageloader.core.ImageLoader;
 

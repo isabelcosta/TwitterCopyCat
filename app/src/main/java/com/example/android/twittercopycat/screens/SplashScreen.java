@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.example.android.twittercopycat.R;
-import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
 
 public class SplashScreen extends Activity {
 

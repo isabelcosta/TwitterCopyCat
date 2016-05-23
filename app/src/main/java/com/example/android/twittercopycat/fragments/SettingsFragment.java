@@ -8,7 +8,7 @@ import android.preference.PreferenceFragment;
 import android.util.Log;
 
 import com.example.android.twittercopycat.R;
-import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
 import com.example.android.twittercopycat.helpers.Constants;
 
 /**

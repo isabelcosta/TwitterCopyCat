@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.twittercopycat.R;
-import com.example.android.twittercopycat.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
 import com.example.android.twittercopycat.fragments.MyTimelineFragment;
 
 import winterwell.jtwitter.Twitter;
