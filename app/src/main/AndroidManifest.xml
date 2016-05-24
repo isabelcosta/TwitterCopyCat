@@ -38,10 +38,18 @@
             android:label="@string/title_activity_my_timeline" />
         <activity
             android:name=".screens.DetailScreen"
-            android:label="@string/title_activity_detail" />
+            android:label="@string/title_activity_detail">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".screens.PublicTimelineScreen" />
+        </activity>
         <activity
             android:name=".screens.PublicTimelineScreen"
-            android:label="@string/title_activity_timeline" />
+            android:label="@string/title_activity_timeline">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".screens.LoginScreen" />
+        </activity>
         <activity
             android:name=".screens.SettingsScreen"
             android:label="@string/title_activity_settings"
@@ -76,12 +84,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- Services -->
-
-        <service
-            android:name=".services.MySendOfflineService"
-            android:exported="false" />
-
         <receiver
             android:name=".receivers.MyAlarmReceiver"
             android:enabled="true"
@@ -90,6 +92,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <!-- Services -->
+
+        <service
+            android:name=".services.MySendOfflineService"
+            android:exported="false" />
 
         <service
             android:name=".services.NewTweetService"
