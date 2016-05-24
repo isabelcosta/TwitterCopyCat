@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#09C"
+    android:padding="@dimen/widget_margin">
+
+    <TextView
+        android:id="@+id/appwidget_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="#09C"
+        android:contentDescription="@string/appwidget_text"
+        android:text="@string/appwidget_text"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:textStyle="bold|italic" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:weightSum="1">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mr. Penguin"
+            android:gravity="center"
+            android:layout_weight="0.33"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ID #234"
+            android:layout_weight="0.33"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="25 May"
+            android:gravity="center"
+            android:layout_weight="0.33"/>
+    </LinearLayout>
+
+</LinearLayout>
+
+<!--
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/words"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_marginTop="3dp"
+  android:layout_marginLeft="3dp"
+  android:background="@drawable/widget_frame"
+/>
+-->
