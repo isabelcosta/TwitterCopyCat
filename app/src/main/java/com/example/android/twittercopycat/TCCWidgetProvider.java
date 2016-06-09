@@ -16,8 +16,8 @@ import com.example.android.twittercopycat.services.WidgetService;
  */
 public class TCCWidgetProvider extends AppWidgetProvider {
 
-    public static String EXTRA_WORD=
-            "com.example.android.twittercopycat.WORD";
+//    public static String EXTRA_WORD=
+//            "com.example.android.twittercopycat.WORD";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
