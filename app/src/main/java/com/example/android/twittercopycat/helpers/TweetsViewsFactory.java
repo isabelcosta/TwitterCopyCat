@@ -32,7 +32,7 @@ public class TweetsViewsFactory implements RemoteViewsService.RemoteViewsFactory
     private TwitterCopyCatApplication app = TwitterCopyCatApplication.getInstance();
     private String[] tweets = new String[WIDGET_NUMBER_OF_TWEETS];
 
-    private Context ctxt=null;
+    private Context ctxt = null;
     private int appWidgetId;
 
     public TweetsViewsFactory(Context ctxt, Intent intent) {

@@ -31,9 +31,9 @@ public class TCCWidgetProvider extends AppWidgetProvider {
             RemoteViews widget = new RemoteViews(context.getPackageName(),
                     R.layout.tcc_widget);
 
-            widget.setRemoteAdapter(appWidgetId, R.id.words,
-                    svcIntent);
+            widget.setRemoteAdapter(appWidgetId, R.id.words, svcIntent);
 
+            // Register an onClickListener
             Intent clickIntent = new Intent(context, PublicTimelineScreen.class);
             PendingIntent clickPI=PendingIntent
                     .getActivity(context, 0,
@@ -43,7 +43,6 @@ public class TCCWidgetProvider extends AppWidgetProvider {
             widget.setPendingIntentTemplate(R.id.words, clickPI);
 
             appWidgetManager.updateAppWidget(appWidgetId, widget);
-            //updateAppWidget(context, appWidgetManager, appWidgetId);
         }
 
         super.onUpdate(context, appWidgetManager, appWidgetIds);
