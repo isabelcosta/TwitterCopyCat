@@ -28,7 +28,6 @@
     <string name="tweet_text">I\'m not a Pinguin!</string>
 
 
-
     <!--Menu text-->
     <string name="action_refresh">Refresh</string>
     <string name="action_settings">Settings</string>
@@ -98,5 +97,7 @@
         <item>1440</item>
         <item>-1</item>
     </string-array>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>

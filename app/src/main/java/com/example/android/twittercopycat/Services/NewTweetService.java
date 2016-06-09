@@ -3,15 +3,18 @@ package com.example.android.twittercopycat.services;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.example.android.twittercopycat.screens.PublicTimelineScreen;
 import com.example.android.twittercopycat.R;
-import com.example.android.twittercopycat.entities.TweetItem;
+import com.example.android.twittercopycat.TCCWidgetProvider;
 import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
+import com.example.android.twittercopycat.entities.TweetItem;
+import com.example.android.twittercopycat.screens.PublicTimelineScreen;
 
 import java.util.List;
 
@@ -77,6 +80,9 @@ public class NewTweetService extends IntentService {
                 if(lastOnlineTweetID != lastSavedTweetID){
                     // Create Notification
                     createNewTweetNotification();
+
+                    // Update Widget tweets
+                    notifyTweetWidget();
                 }
             }
         }
@@ -105,6 +111,7 @@ public class NewTweetService extends IntentService {
 
         mBuilder.setContentIntent(resultPendingIntent);
 
+        // TODO: 09-06-2016 not sure if this could be improved 
         // Sets an ID for the notification
         int mNotificationId = 001;
 
@@ -116,4 +123,14 @@ public class NewTweetService extends IntentService {
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
     }
 
+    private void notifyTweetWidget(){
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] ids = appWidgetManager.getAppWidgetIds(
+                new ComponentName(
+                        this.getPackageName(),
+                        TCCWidgetProvider.class.getName()
+                )
+        );
+        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.words);
+    }
 }
