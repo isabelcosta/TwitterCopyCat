@@ -18,6 +18,7 @@ import com.example.android.twittercopycat.R;
 import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
 import com.example.android.twittercopycat.entities.TweetItem;
 import com.example.android.twittercopycat.helpers.Constants;
+import com.example.android.twittercopycat.helpers.TwitterCopyCatHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -135,11 +136,13 @@ public class TimelineFragment extends Fragment {
 
     protected long getUpdatePeriod(){
         if(isPublic()){
-            return  getTimeInMiliSeconds(Long.valueOf(0), Long.valueOf(0), Long.valueOf(Constants.PUBLIC_SYNC_PERIOD));
+            return  TwitterCopyCatHelper.getTimeInMiliSeconds(
+                    Long.valueOf(0), Long.valueOf(0), Long.valueOf(Constants.PUBLIC_SYNC_PERIOD));
         } else {
             long interval = app.getSyncFrequencyPref();
             if(interval != -1){
-                return getTimeInMiliSeconds(Long.valueOf(0), Long.valueOf(0), Long.valueOf(app.getSyncFrequencyPref()));
+                return TwitterCopyCatHelper.getTimeInMiliSeconds(
+                        Long.valueOf(0), Long.valueOf(0), Long.valueOf(app.getSyncFrequencyPref()));
             }
             return -1;
         }
@@ -291,7 +294,7 @@ public class TimelineFragment extends Fragment {
             }
 
             //delete old tweets from database
-            deleteOldTweets();
+            TwitterCopyCatHelper.deleteOldTweets(isPublic());
 
             List<TweetItem> TweetItems = new LinkedList<>();
 
@@ -346,7 +349,7 @@ public class TimelineFragment extends Fragment {
         @Override
         protected List<TweetItem> doInBackground(Void... params) {
 
-            List<TweetItem> fetchedTimeline = getFetchedOfflineTimeline();
+            List<TweetItem> fetchedTimeline = TwitterCopyCatHelper.getFetchedOfflineTimeline(isPublic());
 
             if(fetchedTimeline == null){
                 return null;
@@ -374,43 +377,8 @@ public class TimelineFragment extends Fragment {
         return true;
     }
 
-    protected List<TweetItem> getFetchedOfflineTimeline() {
-        return TweetItem.find(
-                TweetItem.class,
-                String.format("%s = ?", TweetItem.IS_PUBLIC_COLUMN_NAME),
-                isPublic() ? "1" : "0");
-    }
-
-    protected void deleteOldTweets(){
-        List<TweetItem> oldTweets = getFetchedOfflineTimeline();
-        for(TweetItem t : oldTweets){
-            t.delete();
-        }
-    }
-
     //defined in child classes
     protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG) {
         return null;
-    }
-
-    protected long getTimeInMiliSeconds(Long hours, Long minutes, Long seconds) {
-        long miliSeconds = 1000;
-        long hoursInMiliSec = 0;
-        long minutesInMiliSec = 0;
-        long secondsInMiliSec = 0;
-
-        if (hours != null) {
-            hoursInMiliSec = hours * 60 * 60 * miliSeconds;
-        }
-
-        if (minutes != null) {
-            minutesInMiliSec = minutes * 60 * miliSeconds;
-        }
-
-        if (seconds != null) {
-            secondsInMiliSec = seconds * miliSeconds;
-        }
-
-        return hoursInMiliSec + minutesInMiliSec + secondsInMiliSec;
     }
 }

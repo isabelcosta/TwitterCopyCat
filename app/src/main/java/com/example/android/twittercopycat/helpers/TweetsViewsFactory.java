@@ -97,13 +97,10 @@ public class TweetsViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
         if(app.isNetworkAvailable()){
             // TODO: 08-06-2016 put get public timeline in helper
-            //Check for public Timeline
-            Twitter t = new Twitter();
-            t.setAPIRootUrl(app.getApiUrl());
-            t.setCount(WIDGET_NUMBER_OF_TWEETS);
 
             // Get the last 5 tweets
-            List<Twitter.Status> fetchedTweets = t.getPublicTimeline();
+            List<Twitter.Status> fetchedTweets =
+                    TwitterCopyCatHelper.getPublicTimeline(app.getApiUrl(), WIDGET_NUMBER_OF_TWEETS);
 
             if(!fetchedTweets.isEmpty()){
                 for(int i=0; i < WIDGET_NUMBER_OF_TWEETS; i++){
