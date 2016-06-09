@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialKeyguardLayout="@layout/tcc_widget"
     android:initialLayout="@layout/tcc_widget"
@@ -8,4 +7,4 @@
     android:autoAdvanceViewId="@+id/words"
     android:resizeMode="vertical"
     android:previewImage="@drawable/example_appwidget_preview"
-    android:widgetCategory="home_screen"></appwidget-provider>
+    android:widgetCategory="home_screen"/>
