@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.android.twittercopycat.R;
-import com.example.android.twittercopycat.TCCWidgetProvider;
+import com.example.android.twittercopycat.widget.TCCWidgetProvider;
 import com.example.android.twittercopycat.application.TwitterCopyCatApplication;
 import com.example.android.twittercopycat.entities.TweetItem;
 import com.example.android.twittercopycat.screens.PublicTimelineScreen;
@@ -131,6 +131,8 @@ public class NewTweetService extends IntentService {
                         TCCWidgetProvider.class.getName()
                 )
         );
+
+        Log.d(LOG_TAG, "  |  " + this.getPackageName() + "  |  " + TCCWidgetProvider.class.getName() + "  |  ");
         appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.words);
     }
 }

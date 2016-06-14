@@ -96,11 +96,10 @@ public class TweetsViewsFactory implements RemoteViewsService.RemoteViewsFactory
     public void onDataSetChanged() {
 
         if(app.isNetworkAvailable()){
-            // TODO: 08-06-2016 put get public timeline in helper
 
             // Get the last 5 tweets
             List<Twitter.Status> fetchedTweets =
-                    TwitterCopyCatHelper.getPublicTimeline(app.getApiUrl(), WIDGET_NUMBER_OF_TWEETS);
+                    TwitterCopyCatHelper.getOnlinePublicTimeline(app.getApiUrl(), WIDGET_NUMBER_OF_TWEETS);
 
             if(!fetchedTweets.isEmpty()){
                 for(int i=0; i < WIDGET_NUMBER_OF_TWEETS; i++){
@@ -110,19 +109,16 @@ public class TweetsViewsFactory implements RemoteViewsService.RemoteViewsFactory
 
         } else {
             //get tweets from database
-            List<TweetItem> persistentTweets = TweetItem.find(
-                    TweetItem.class,
-                    String.format("%s = ?", TweetItem.IS_PUBLIC_COLUMN_NAME), "1");
+            List<TweetItem> persistentPublicTweets = TwitterCopyCatHelper.getOfflineTimeline(true);
 
-            if(!persistentTweets.isEmpty()){
+            if(!persistentPublicTweets.isEmpty()){
                 for(int i=0; i < WIDGET_NUMBER_OF_TWEETS; i++){
-                    tweets[i] = persistentTweets.get(i).getTweetText();
+                    tweets[i] = persistentPublicTweets.get(i).getTweetText();
                 }
             }
 
             // FIXME: 09-06-2016 if online tweets or persistent tweets are less then 5 an exception may be thrown
             // TODO: 09-06-2016 this code is repeated in another class it should be moved to a helper class
-            // TODO: 09-06-2016 the value os public is hardcoded it should be a constant in the helper class
         }
     }
 }

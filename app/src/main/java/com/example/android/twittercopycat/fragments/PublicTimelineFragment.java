@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.android.twittercopycat.R;
 import com.example.android.twittercopycat.entities.TweetItem;
 import com.example.android.twittercopycat.helpers.Constants;
+import com.example.android.twittercopycat.helpers.TwitterCopyCatHelper;
 import com.example.android.twittercopycat.screens.DetailScreen;
 
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ import winterwell.jtwitter.Twitter;
  * PublicTimelineFragment is responsible for showing public tweets
  */
 public class PublicTimelineFragment extends TimelineFragment {
+
+    private static final String LOG_TAG = "PublicTimelineFragment";
 
     public PublicTimelineFragment() {
         // Required empty public constructor
@@ -72,12 +75,6 @@ public class PublicTimelineFragment extends TimelineFragment {
         View v = layoutInflater.inflate(R.layout.list_item_public_tweet, null);
         int maxCharacters = getResources().getInteger(R.integer.max_tweet_menu_item_characters);
 
-//        TextView tvAuthor = (TextView) v.findViewById(R.id.list_item_tweet_author);
-//        tvAuthor.setText(item.getTweetAuthorName());
-//
-//        TextView tvDate = (TextView) v.findViewById(R.id.list_item_tweet_date);
-//        tvDate.setText(item.getTweetDate());
-
         TextView tvText = (TextView) v.findViewById(R.id.list_item_tweet_text);
         tvText.setText(
                 item.getTweetText().length() >= maxCharacters
@@ -99,12 +96,8 @@ public class PublicTimelineFragment extends TimelineFragment {
     }
 
     @Override
-    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG) {
-
-        Twitter t = new Twitter();
-        t.setAPIRootUrl(API_URL);
-        t.setCount(params.getInt(Constants.MAX_TWEETS));
-        return t.getPublicTimeline();
+    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params) {
+        return TwitterCopyCatHelper.getOnlinePublicTimeline(API_URL, params.getInt(Constants.MAX_TWEETS));
     }
 
     @Override

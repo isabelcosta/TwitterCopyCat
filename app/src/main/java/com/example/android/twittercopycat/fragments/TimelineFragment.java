@@ -39,7 +39,7 @@ import winterwell.jtwitter.Twitter;
  */
 public class TimelineFragment extends Fragment {
 
-    protected static final String LOG_TAG = "TimelineFragment";
+    private static final String LOG_TAG = "TimelineFragment";
     private static int DELAY = 15000;
     private static int PERIODICAL_TIME = 15000;
 
@@ -51,7 +51,6 @@ public class TimelineFragment extends Fragment {
     protected ListView mListView;
     protected ListScreenAdapter mListAdapter;
     protected List<TweetItem> timeline;
-    protected int maxCharacters = 20;
     protected static String API_URL = Constants.API_URL;
     protected TwitterCopyCatApplication app;
 
@@ -108,7 +107,6 @@ public class TimelineFragment extends Fragment {
      * @param password user password if logged.
      * @return A new instance of fragment PublicTimelineFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static TimelineFragment newInstance(String username, String password) {
         TimelineFragment fragment = new TimelineFragment();
         Bundle args = new Bundle();
@@ -195,17 +193,21 @@ public class TimelineFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
+    /**
+     * Starts asynchronous tasks to get either offline (persistent) or online tweets
+     * @param offline - true if fetch from database
+     *                - false if fetch from server
+     */
     public void updateTweets(boolean offline) {
         Log.d(LOG_TAG, "Sync period       ?    " + String.valueOf(getUpdatePeriod()));
         Log.d(LOG_TAG, "Number of tweets  ?    " + String.valueOf(app.getNumberOfTweetsPref()));
         Log.d(LOG_TAG, "Wifi only mode    ?    " + String.valueOf(app.getWifiOnlyPref()));
 
         if(offline){
-            FetchPublicOfflineTweetTask tweetTask = new FetchPublicOfflineTweetTask(getActivity(), timeline);
+            FetchOfflineTweetTask tweetTask = new FetchOfflineTweetTask(getActivity(), timeline);
             tweetTask.execute();
         } else {
             Bundle args = new Bundle();
@@ -220,7 +222,7 @@ public class TimelineFragment extends Fragment {
                 args.putString(Constants.PASSWORD, password);
             }
 
-            FetchPublicOnlineTweetTask tweetTask = new FetchPublicOnlineTweetTask(getActivity(), timeline);
+            FetchOnlineTweetTask tweetTask = new FetchOnlineTweetTask(getActivity(), timeline);
             tweetTask.execute(args);
         }
     }
@@ -267,14 +269,14 @@ public class TimelineFragment extends Fragment {
     /**
      * Tweet Online Fetching
      */
-    public class FetchPublicOnlineTweetTask extends AsyncTask<Bundle, Void, List<TweetItem>> {
+    public class FetchOnlineTweetTask extends AsyncTask<Bundle, Void, List<TweetItem>> {
 
-        private final String LOG_TAG = FetchPublicOnlineTweetTask.class.getSimpleName();
+        private final String LOG_TAG = FetchOnlineTweetTask.class.getSimpleName();
 
         private final Context mContext;
         private List<TweetItem> timeline;
 
-        public FetchPublicOnlineTweetTask(Context context, List<TweetItem> givenTimeline) {
+        public FetchOnlineTweetTask(Context context, List<TweetItem> givenTimeline) {
             mContext = context;
             timeline = givenTimeline;
         }
@@ -284,10 +286,7 @@ public class TimelineFragment extends Fragment {
         @Override
         protected List<TweetItem> doInBackground(Bundle... params) {
 
-            List<Twitter.Status> fetchedTimeline = getFetchedOnlineTimeline(
-                    params[0],
-                    LOG_TAG
-            );
+            List<Twitter.Status> fetchedTimeline = getFetchedOnlineTimeline(params[0]);
 
             if(fetchedTimeline == null){
                 return null;
@@ -332,14 +331,15 @@ public class TimelineFragment extends Fragment {
     /**
      * Offline Tweet Fetching
      */
-    public class FetchPublicOfflineTweetTask extends AsyncTask<Void, Void, List<TweetItem>> {
+    public class FetchOfflineTweetTask extends AsyncTask<Void, Void, List<TweetItem>> {
 
-        private final String LOG_TAG = FetchPublicOfflineTweetTask.class.getSimpleName();
+        private final String LOG_TAG = FetchOfflineTweetTask.class.getSimpleName();
 
+        // TODO: 14-06-2016 check if it is unnecessary and test
         private final Context mContext;
         private List<TweetItem> fetchedTimeline;
 
-        public FetchPublicOfflineTweetTask(Context context, List<TweetItem> givenTimeline) {
+        public FetchOfflineTweetTask(Context context, List<TweetItem> givenTimeline) {
             mContext = context;
             fetchedTimeline = givenTimeline;
         }
@@ -349,7 +349,7 @@ public class TimelineFragment extends Fragment {
         @Override
         protected List<TweetItem> doInBackground(Void... params) {
 
-            List<TweetItem> fetchedTimeline = TwitterCopyCatHelper.getFetchedOfflineTimeline(isPublic());
+            List<TweetItem> fetchedTimeline = TwitterCopyCatHelper.getOfflineTimeline(isPublic());
 
             if(fetchedTimeline == null){
                 return null;
@@ -378,7 +378,7 @@ public class TimelineFragment extends Fragment {
     }
 
     //defined in child classes
-    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG) {
+    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params) {
         return null;
     }
 }

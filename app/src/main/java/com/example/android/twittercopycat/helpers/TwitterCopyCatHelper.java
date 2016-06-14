@@ -11,7 +11,7 @@ import winterwell.jtwitter.Twitter;
  */
 public class TwitterCopyCatHelper {
 
-    public static List<Twitter.Status> getPublicTimeline(String apiUrl, int numberOfTweets){
+    public static List<Twitter.Status> getOnlinePublicTimeline(String apiUrl, int numberOfTweets){
         Twitter t = new Twitter();
         t.setAPIRootUrl(apiUrl);
         t.setCount(numberOfTweets);
@@ -20,14 +20,28 @@ public class TwitterCopyCatHelper {
         return t.getPublicTimeline();
     }
 
+    public static List<Twitter.Status> getOnlinePrivateTimeline(
+            String apiUrl,
+            int numberOfTweets,
+            String username,
+            String password
+    ){
+        Twitter t = new Twitter(username, password);
+        t.setAPIRootUrl(apiUrl);
+        t.setCount(numberOfTweets);
+
+        // Get the last 5 tweets
+        return t.getPublicTimeline();
+    }
+
     public static void deleteOldTweets(boolean isPublic){
-        List<TweetItem> oldTweets = getFetchedOfflineTimeline(isPublic);
+        List<TweetItem> oldTweets = getOfflineTimeline(isPublic);
         for(TweetItem t : oldTweets){
             t.delete();
         }
     }
 
-    public static List<TweetItem> getFetchedOfflineTimeline(boolean isPublic) {
+    public static List<TweetItem> getOfflineTimeline(boolean isPublic) {
         return TweetItem.find(
                 TweetItem.class,
                 String.format("%s = ?", TweetItem.IS_PUBLIC_COLUMN_NAME),

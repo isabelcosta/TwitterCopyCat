@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.android.twittercopycat.R;
 import com.example.android.twittercopycat.entities.TweetItem;
 import com.example.android.twittercopycat.helpers.Constants;
+import com.example.android.twittercopycat.helpers.TwitterCopyCatHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ import winterwell.jtwitter.Twitter;
  */
 public class MyTimelineFragment extends TimelineFragment {
 
+    private static final String LOG_TAG = "MyTimelineFragment";
+
     public MyTimelineFragment() {
         // Required empty public constructor
     }
@@ -35,8 +38,8 @@ public class MyTimelineFragment extends TimelineFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param username Parameter 1.
-     * @param password Parameter 2.
+     * @param username
+     * @param password
      * @return A new instance of fragment MyTimelineFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -100,17 +103,15 @@ public class MyTimelineFragment extends TimelineFragment {
     }
 
     @Override
-    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params, String LOG_TAG) {
+    protected List<Twitter.Status> getFetchedOnlineTimeline(Bundle params) {
         String username = params.getString(Constants.USERNAME);
         String password = params.getString(Constants.PASSWORD);
-        Twitter t = new Twitter(username, password);
 
         Log.d(LOG_TAG, "USERNAME: " + username);
         Log.d(LOG_TAG, "PASSWORD: " + password);
 
-        t.setAPIRootUrl(API_URL);
-        t.setCount(params.getInt(Constants.MAX_TWEETS));
-        return t.getUserTimeline();
+        return TwitterCopyCatHelper.getOnlinePrivateTimeline(
+                API_URL, params.getInt(Constants.MAX_TWEETS), username, password);
     }
 
     @Override
@@ -118,4 +119,3 @@ public class MyTimelineFragment extends TimelineFragment {
         return false;
     }
 }
-
