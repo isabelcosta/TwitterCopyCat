@@ -5,7 +5,7 @@ Description: ...
 ## Used libraries:
 
 * [Sugar ORM](https://github.com/satyan/sugar)
-* [Universal Image Loader](https://github.com/satyan/sugar)
+* [Universal Image Loader](https://github.com/nostra13/Android-Universal-Image-Loader)
 
 ## App wireframe:
 
