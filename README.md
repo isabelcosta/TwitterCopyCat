@@ -2,7 +2,7 @@
 
 **Description:** My first android app while learning Android development concepts. Its funcionality is similar to Twitter. The user has a timeline with public tweets and can send 140 caracters tweets.
 
-**Current state:** Right now, the app doesn't work properly because its dependent on an obsolete API.
+**Current state:** Right now, the app doesn't work properly because its dependent on obsolete URL to get and publish tweets.
 
 **Basic Funcionalities:**
 
