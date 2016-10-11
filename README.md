@@ -1,6 +1,14 @@
 # TwitterCopyCat
 
-Description: My first android app while learning Android development concepts.
+**Description:** My first android app while learning Android development concepts. Its funcionality is similar to Twitter. The user has a timeline with public tweets and can send 140 caracters tweets.
+
+**Current state:** Right now, the app doesn't work properly because its dependent on an obsolete API.
+
+**Basic Funcionalities:**
+
+- Login with a username and password;
+- Send 140 caracters tweet;
+- ... [todo]
 
 ## Used libraries:
 
